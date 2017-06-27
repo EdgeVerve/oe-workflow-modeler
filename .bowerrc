@@ -1,0 +1,6 @@
+{
+     "cwd": "./",
+    "scripts": {
+	"postinstall": "npm install && grunt build"
+     }
+}

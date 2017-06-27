@@ -1,0 +1,21 @@
+{
+  "name": "oe-workflow-modeler",
+  "description": "oeCloud's BPMN compatible workflow modeler",
+  "main": "app/index.js",
+  
+  "license": "MIT",
+  "keywords": [
+    "oecloud, oe-workflow"
+  ],
+  "scripts":{
+    "postinstall": "grunt build"
+  },
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "oe-workflow-modeler",
+  "version": "0.0.0",
+  "description": "A oeCloud compatible bpmn-js modeler",
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edgeverve"
+  },
+  "keywords": [
+    "oecloud, oe-workflow"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "brfs": "^1.2.0",
+    "grunt": "~1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-connect": "~1.0.2",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-contrib-watch": "~1.0.0",
+    "load-grunt-tasks": "~3.5.0"
+  },
+  "dependencies": {
+    "bpmn-js": "^0.15.0",
+    "oe-workflow-propertiespanel": "git+http://evgit/oecloud.io/oe-workflow-properties-panel.git#master",
+    "camunda-bpmn-moddle": "git+http://evgit/ArulR/oe-camunda-bpmn-moddle.git#master",
+    "diagram-js": "^0.15.0",
+    "jquery": "^2.1.1",
+    "lodash": "^3.0.0"
+  },
+  "scripts": {
+    "build": "grunt dist",
+    "start": "grunt auto-build",
+    "dist": "grunt build"
+  }
+}

@@ -1,0 +1,4 @@
+/scripts/redux.js
+node_modules
+bower_components
+wct.conf.js
