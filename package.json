@@ -26,7 +26,7 @@
   "dependencies": {
     "bpmn-js": "^0.15.0",
     "oe-workflow-propertiespanel": "git+http://evgit/oecloud.io/oe-workflow-properties-panel.git#master",
-    "camunda-bpmn-moddle": "git+http://evgit/ArulR/oe-camunda-bpmn-moddle.git#master",
+    "camunda-bpmn-moddle": "git+http://evgit/oecloud.io/oe-camunda-bpmn-moddle.git#master",
     "diagram-js": "^0.15.0",
     "jquery": "^2.1.1",
     "lodash": "^3.0.0"
