@@ -12,7 +12,7 @@ module.exports = function (grunt) {
   function resolvePath(project, file) {
     return path.join(path.dirname(require.resolve(project)), file);
   }
-grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // project configuration
   grunt.initConfig({
@@ -140,11 +140,15 @@ grunt.loadNpmTasks('grunt-contrib-uglify');
     },
     uglify: {
       options: {
-        mangle: true
+        // mangle: true,
+        sourceMap: true,
+        mangle: {
+          reserved: ['main', 'opendiagram', 'currentFileName']
+        },
       },
       target: {
         files: {
-        'dist/workflow.min.js': ['dist/index.js']
+          'dist/workflow.min.js': ['dist/index.js']
         }
       }
     }
@@ -152,18 +156,18 @@ grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // tasks,'less',
 
-  grunt.registerTask('build', ['copy',  'browserify:app','uglify']);
-  grunt.registerTask('minify',['uglify']);
+  grunt.registerTask('build', ['copy', 'browserify:app', 'uglify']);
+  grunt.registerTask('minify', ['uglify']);
   grunt.registerTask('auto-build', [
     'copy',
-   
+
     'browserify:watch',
     'uglify',
     'connect:livereload',
     'watch'
   ]);
   grunt.registerTask('dist', ['copy',
-     'build','uglify'
+    'build', 'uglify'
   ]);
   grunt.registerTask('serve', [
     'browserify:watch',

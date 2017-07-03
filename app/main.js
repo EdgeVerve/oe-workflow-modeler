@@ -9,6 +9,18 @@ Copyright Notice
 
 //     }
 // });
+/*
+Changes:- changed the auth token method to auto fetch from session.
+*/
+// $(document).ready(function () {
+//     $('.openbutton').click(function () {
+//         alert("test")
+//     });
+//     // Handler for .ready() called.
+//     alert("initiate alert")
+
+// });
+
 var generalXMLDef = {};
 window.currFileName = '';
 window.openSave = function (data) {
@@ -71,8 +83,8 @@ function saveDiagram(callback) {
     }
 }
 
+
 function opendiagram(id) {
-    //console.log(id);
     var version = $('#' + $.trim(id)).val();
     window.createDiagram(generalXMLDef[version].data);
     window.currFileName = generalXMLDef[version].name;
@@ -81,11 +93,14 @@ function opendiagram(id) {
     $('#xmldata').val(generalXMLDef[version].data);
     $('#modal2').closeModal();
 }
+
+
+
 $('#js-open-diagram').click(function () {
     var tenantId = sessionStorage.getItem('tenantId');
     var accessToken = sessionStorage.getItem('auth_token');
-    var bpmnurl = '../api/bpmndata?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;
-    var historyurl = '../api/bpmndata/history?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;
+    var bpmnurl = '/api/bpmndata'; //?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;
+    var historyurl = '/api/bpmndata/history'; //?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;
     //console.log("history:=  " + historyurl)
     var settingsBpmn = {
         async: true,
@@ -128,9 +143,15 @@ $('#js-open-diagram').click(function () {
             }
             //console.log(totalBpmns[i].versionmessage.slice(0,25)+"..."+formatDate(new Date(totalBpmns[i]._modifiedOn)));
             var temp = '<tr class="style-scope work-flow"><td class="style-scope work-flow">' + totalBpmns[i].bpmnname + '</td><td class="style-scope work-flow"><select id="' + totalBpmns[i].id + '" class="style-scope work-flow"><option value="' + totalBpmns[i]._version + '" title="' + totalBpmns[i].versionmessage + '" class="style-scope work-flow">' +
-                tempoption + '</option></select></td>' +
-                '<td class="style-scope work-flow">  <button class="opendg btn-floating btn-large waves-effect waves-light red style-scope work-flow" onclick="opendiagram(\'' + totalBpmns[i].id + '\')"><i class="material-icons style-scope work-flow">folder_open</i></button><td></tr>';
+                tempoption + '</option></select></td>' + //onclick="opendiagram(\'' + totalBpmns[i].id + '\')"
+                '<td class="style-scope work-flow">  <button class="opendg btn-floating btn-large waves-effect waves-light red style-scope work-flow openbutton" name="'+totalBpmns[i].id+'" id="opend-' + totalBpmns[i].id + '" ><i class="material-icons style-scope work-flow">folder_open</i></button><td></tr>';
             $('#filestable tbody').append(temp);
+           
+            $('#opend-' + totalBpmns[i].id).bind("click", function () {
+                //alert("User clicked on 'foo.'");
+                opendiagram(this.name);
+
+            });
 
         }
         $.ajax(settingsHistory).done(function (response) {
@@ -175,7 +196,7 @@ function validateAndSaveFile(callback) {
     var accessToken = sessionStorage.getItem('auth_token');
 
     //filter=[where][and][0][tenant]=default&filter[where][and][1][bpmnname]=
-    var bpmnurl = '../api/bpmndata?filter=[where][and][0][tenant]=' + tenantId + '&filter[where][and][1][bpmnname]=' + $('#bpmnname').val() + '&access_token=' + accessToken;
+    var bpmnurl = '/api/bpmndata?filter[where][and][1][bpmnname]=' + $('#bpmnname').val(); // + '&filter=[where][and][0][tenant]=' + tenantId + '&&access_token=' + accessToken;
     var settingsHistory = {
         'async': true,
         'crossDomain': true,
@@ -223,11 +244,11 @@ function ajaxSave(callback) {
             'content-type': 'application/json',
             'cache-control': 'no-cache'
         },
-        'processData': false 
+        'processData': false
     };
     var data;
     if ((window.currentFileStatus && window.currentFileStatus === 'new') || (window.currFileName != $('#bpmnname').val())) {
-        postUrl = '../api/bpmndata?access_token=' + accessToken;
+        postUrl = '/api/bpmndata'; //?access_token=' + accessToken;
         data = {
             bpmnname: $('#bpmnname').val(),
             tenant: tenantId,
@@ -237,7 +258,7 @@ function ajaxSave(callback) {
         settings.data = JSON.stringify(data);
         settings.url = postUrl;
     } else if (window.currentFileStatus === 'old') {
-        postUrl = '../api/bpmndata/' + $('#modelId').val() + '?access_token=' + accessToken;
+        postUrl = '/api/bpmndata/' + $('#modelId').val(); // + '?access_token=' + accessToken;
         data = {
             bpmnname: $('#bpmnname').val(),
             tenant: tenantId,
@@ -290,7 +311,7 @@ var publishWorkflow = function () {
         var accessToken = sessionStorage.getItem('auth_token');
         var tenantId = sessionStorage.getItem('tenantId');
         //var username = sessionStorage.getItem('username');
-        var postUrl = '../api/WorkflowDefinitions?access_token=' + accessToken;
+        var postUrl = '/api/WorkflowDefinitions'; //?access_token=' + accessToken;
         var settings = {
             'async': true,
             'crossDomain': true,
@@ -300,7 +321,7 @@ var publishWorkflow = function () {
                 'content-type': 'application/json',
                 'cache-control': 'no-cache'
             },
-            'processData': false 
+            'processData': false
         };
         var data = {
             name: $('#bpmnname').val(),
