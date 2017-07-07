@@ -4,7 +4,9 @@ The Program may contain/reference third party or open source components, the rig
 remain with the applicable third party licensors or the open source community as the case may be and nothing 
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/image-icons.html">
 <dom-module id="work-flow">
 
 	<style is="custom-style" include="shared-styles"></style>
@@ -141,6 +143,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 							<iron-icon icon='file-download' style="right: 6px;"></iron-icon>
 						</a>
 						<paper-tooltip for="js-download-diagram" position="bottom">Download Workflow</paper-tooltip>
+					</li>
+					<li>
+						<a id="js-download-svg" class="btn-floating nopointer blue" disabled="disabled">
+							<iron-icon icon='image:image' style="right: 6px;top:7px;"></iron-icon>
+						</a>
+						<paper-tooltip for="js-download-svg" position="bottom">Download Workflow as SVG</paper-tooltip>
 					</li>
 					<li><a id="js-save-diagram" class="btn-floating  nopointer blue" disabled="disabled"><i class="material-icons">save</i>
       </a>
