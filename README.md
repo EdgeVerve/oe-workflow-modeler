@@ -1,5 +1,7 @@
 # bpmn-js Modeler + Properties Panel Example
 
+> ### This project is modification of original bpmn-properties module of [bpmn-js-examples](https://github.com/bpmn-io/bpmn-js-examples).
+
 This example uses [bpmn-js](https://github.com/bpmn-io/bpmn-js) and [bpmn-js-properties-panel](https://github.com/bpmn-io/bpmn-js-properties-panel). It implements a BPMN 2.0 modeler that allows you to edit execution related properties via a properties panel.
 
 
