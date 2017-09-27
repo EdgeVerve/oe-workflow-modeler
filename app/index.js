@@ -43,7 +43,7 @@ var bpmnModeler = new BpmnModeler({
   }
 });
 
-
+window.bpmnModeler = bpmnModeler;
 
 var logger = function()
 {
@@ -68,6 +68,70 @@ var logger = function()
 
 logger.disableLogger();
 //logger.enableLogger();
+var eventBus = bpmnModeler.get('eventBus');
+eventBus.on('element.dblclick',drillDown);
+
+function drillDown(e) {
+	var type = e.element ? e.element.type : e.data.shape.type;
+	if(type == "bpmn:CallActivity") {
+		  openCallActivity(e);
+	  }else if(type == "bpmn:BusinessRuleTask") {
+		  openDecision(e);
+		  
+	  }else{
+		  return;
+	  }
+}
+
+function openDecision(e) {
+	var id = e.element.id;
+	var elementRegistry =  bpmnModeler.get('elementRegistry');
+	var bpmnElement = elementRegistry.get(id);
+	var bpmnObj = bpmnElement.businessObject;
+	window.parent.postMessage(bpmnObj.decisionRef,"*");
+}
+
+function openCallActivity(e) {
+  var id = e.element ? e.element.id : e.data.shape.id;
+  if(!window.currentWFOpened) {
+	  alert("Please save the parent process")
+	  return;
+  }
+  if(!window.wfOpenedHistStack) {
+	  window.wfOpenedHistStack = [];
+  }
+  window.wfOpenedHistStack.push(window.currentWFOpened);	  
+  var elementRegistry =  bpmnModeler.get('elementRegistry');
+  var bpmnElement = elementRegistry.get(id);
+  var bpmnObj = bpmnElement.businessObject;
+  window.openDiagramByName(bpmnObj.calledElement);
+  
+}
+
+window.openDiagramByName = function(name){
+	var diagramDetails = {
+        async: true,
+        crossDomain: true,
+        url: '/api/bpmndata?filter={"where":{"bpmnname":"'+name+'"}}',
+        method: 'GET',
+        headers: {
+            'cache-control': 'no-cache'
+        },
+        error: function () {
+            alert('something went wrong');
+        }
+    }
+
+    $.ajax(diagramDetails).done(function (response) {
+		if(response.length == 0) {
+			alert("Unable to find the call activity");
+		}
+		window.currentWFOpened = {"name": name};
+		$("#js-back-to-parent").attr("disabled",false);
+		openDiagram(response[0].xmldata)	
+	});
+  }
+
 
 var newDiagramXML = fs.readFileSync(__dirname + '/../resources/newDiagram.bpmn', 'utf-8');
 

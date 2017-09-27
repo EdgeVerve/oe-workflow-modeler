@@ -92,8 +92,10 @@ function opendiagram(id) {
     $('#version').val(version);
     $('#xmldata').val(generalXMLDef[version].data);
     $('#modal2').closeModal();
+	window.currentWFOpened = {"id": id}; 
 }
 
+window.opendiagram = opendiagram;
 
 
 $('#js-open-diagram').click(function () {
