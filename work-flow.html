@@ -132,12 +132,26 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 </div>-->
 			</div>
 
-			<div class="fixed-action-btn horizontal click-to-toggle" style="right: 320px;top: 23px;bottom:95%">
+			<div class="fixed-action-btn horizontal click-to-toggle" on-tap="togglePropertiesPanel"  id="showHidePanelButton" style="right: 320px;top:7%">
+				<a id="toggle-prop-panel" class="btn-floating  blue" >
+					<iron-icon icon='settings-ethernet' style="right: -5px;top: 6px;"></iron-icon>
+				</a>
+				<paper-tooltip for="toggle-prop-panel" position="bottom">Show/Hide Properties panel</paper-tooltip>			
+			</div>
+			
+			<div class="fixed-action-btn horizontal click-to-toggle" id="actionButtons" style="right: 370px;top: 23px;bottom:95%">
 				<a class="btn-floating btn-large blue">
 					<i class="material-icons">menu</i>
 				</a>
 				<ul>
 					<!--<i class="material-icons">file-download</i><i class="material-icons">folder-open</i>-->
+					<li>
+						<a id="js-back-to-parent" class="btn-floating nopointer blue" on-tap="backToParent" disabled="disabled">
+							<iron-icon icon='arrow-back' style="right: 6px;top: 6px;"></iron-icon>
+						</a>
+						<paper-tooltip for="js-back-to-paremt" position="bottom">Go back to parent</paper-tooltip>
+					</li>
+					
 					<li>
 						<a id="js-download-diagram" class="btn-floating nopointer blue" disabled="disabled">
 							<iron-icon icon='file-download' style="right: 6px;"></iron-icon>
@@ -278,6 +292,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				isSaveable:{
 					type:Boolean,
 					value:true
+				},
+				isPropertiesPanelCollapsed: {
+					type: Boolean,
+					value: false
 				}
 			},
 			ready: function () {
@@ -291,7 +309,39 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					
 				});
 				// this.scopeSubtree(this.$.container, false);
-			}
+			},
+			togglePropertiesPanel: function() {
+				var propertiesPanel = window.bpmnModeler.get('propertiesPanel');
+				if(!this.isPropertiesPanelCollapsed) {
+					propertiesPanel.detach();
+					$("#js-canvas").css('width','100%');
+					this.$.showHidePanelButton.style.right = "5px"
+					this.$.actionButtons.style.right = "55px"
+						
+				}else{
+					propertiesPanel.attachTo('#js-properties-panel');
+					this.$.showHidePanelButton.style.right = "320px"
+					this.$.actionButtons.style.right = "370px"
+				}
+				this.isPropertiesPanelCollapsed = !this.isPropertiesPanelCollapsed;
+			 },
+			 backToParent : function(){
+				if(window.wfOpenedHistStack) {
+					var bpmnKey = window.wfOpenedHistStack.pop();
+					if(window.wfOpenedHistStack.length == 0) {
+						$("#js-back-to-parent").attr("disabled",true);
+					}
+					if(bpmnKey.id) {
+						window.opendiagram(bpmnKey.id);
+					}else{
+						window.openDiagramByName(bpmnKey.name);
+					}
+					
+					if(window.simulationMode){
+						this._getProgress(this.local.modelId);
+					}
+				}		
+			 }
 		});
 	</script>
 </dom-module>
