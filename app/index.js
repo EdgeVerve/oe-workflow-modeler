@@ -284,7 +284,8 @@ $(document).on('ready', function() {
   });
   var xmldata = '';
   var downloadLink = $('#js-download-diagram');
-  var downloadSvgLink = $('#js-download-svg');
+  var simulateLink = $('#js-simulate-diagram');
+  var downloadSvgLink = $('#js-download-svg')
   var saveLink = $('#js-save-diagram');
   var publishLink = $('#js-publish-diagram');
   $('#js-save-diagram').click(function() {
@@ -353,6 +354,9 @@ $(document).on('ready', function() {
     });
     saveDiagram(function(err, xml) {
       saveData(saveLink, 'diagram.bpmn', err ? null : xml);
+    });
+	saveDiagram(function(err, xml) {
+      saveData(simulateLink, 'diagram.bpmn', err ? null : xml);
     });
     saveDiagram(function(err, xml) {
       saveData(publishLink, 'diagram.bpmn', err ? null : xml);

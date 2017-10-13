@@ -99,6 +99,7 @@ window.opendiagram = opendiagram;
 
 
 $('#js-open-diagram').click(function () {
+	window.simulationMode = false;
     var tenantId = sessionStorage.getItem('tenantId');
     var accessToken = sessionStorage.getItem('auth_token');
     var bpmnurl = '/api/bpmndata'; //?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;

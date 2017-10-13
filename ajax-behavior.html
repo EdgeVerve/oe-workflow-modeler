@@ -1,0 +1,76 @@
+<script>
+  var baseUtils = baseUtils || {};
+
+  baseUtils.ajaxBehavior = {
+    makeAjaxCall: function (url, method, body, filters, header, cb) {
+      var ajax = document.createElement('oe-ajax');
+      ajax.url = url;
+      if (filters)
+        ajax.params.filter = JSON.stringify(filters);
+      ajax.method = method;
+      if (body) {
+        ajax.body = JSON.stringify(body);
+      }
+      ajax.contentType = "application/json";
+      if (header) {
+        ajax.header = header;
+      }
+      ajax.addEventListener('response', function (resp, err) {
+        cb(null, resp.detail.response);
+      });
+      ajax.addEventListener('error', function (err) {
+        cb(err, null);
+      });
+      ajax.generateRequest();
+    },
+    resolveError: function (err) {
+      var errorObj;
+      var errorMessage;
+      var errorMessages;
+      var errTmpObj;
+      if (!err.detail.request.response) {
+        this.fire('oe-show-error', 'Server did not respond');
+      } else if (err.detail.request.response && err.detail.request.response.message) {
+        this.fire('oe-show-error', err.detail.request.response.message);
+      } else {
+        errorObj = err.detail.request.response.error;
+        errorMessages = [];
+
+        if (errorObj && errorObj.details && errorObj.details.messages && errorObj.details.messages.errs && errorObj
+          .details.messages.errs.length > 0) {
+          errorMessage = "Validation error : - \n";
+          errTmpObj = errorObj.details.messages.errs;
+          errTmpObj.forEach(function (d) {
+            errorMessage += d.path + " -> " + d.message + '\n';
+          });
+          errorMessages.push(errorMessage);
+        }
+
+        if (errorObj && errorObj.errors && errorObj.errors.length > 0) {
+          errorMessage = "Validation error : - \n";
+          errTmpObj = errorObj.errors;
+          errTmpObj.forEach(function (d) {
+            errorMessage += d.path + " -> " + d.message + '\n';
+          });
+          errorMessages.push(errorMessage);
+          errorMessages.push(errorMessage);
+        }
+
+        if (errorObj && errorObj.message) {
+          errorMessages.push(errorObj.message);
+        }
+
+        if (errorObj.errmsg || errorObj.message) {
+          errorMessage = errorObj.errmsg || errorObj.message;
+          errorMessages.push(errorMessage);
+        }
+
+        errorMessage = "Unknown server error";
+        errorMessages.push(errorMessage);
+
+        this.fire('oe-show-error', errorMessages[0]);
+        return errorMessages[0];
+      }
+    }
+  };
+</script>
