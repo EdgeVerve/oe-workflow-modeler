@@ -6,7 +6,20 @@ here transfers the rights to the third party and open source components, except 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../oe-info/oe-info.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../oe-input/oe-input.html">
 <link rel="import" href="../iron-icons/image-icons.html">
+<link rel="import" href="../oe-ui-forms/lazy-component.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="ajax-behavior.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../oe-combo/oe-combo.html">
 <dom-module id="work-flow">
 
 	<style is="custom-style" include="shared-styles"></style>
@@ -86,6 +99,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 			font-size: 24px;
 			font-family: 'Roboto-Light';
 		}
+		.custom-primary {
+			cursor: pointer;				
+			display:block;
+			}		
+			
+		.green {
+			background-color: green;
+			border-color: green;
+		}
 
 		.empty-state .sub-label {
 			font-size: 12px;
@@ -96,6 +118,31 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 			height: 40px;
 			width: 40px;
 		}
+	.iron-selected {
+		font-weight: bold;
+	}	
+	
+	.list-item {
+        height: 36px;
+        line-height: 36px;
+        cursor: pointer;
+        position: relative;
+        font-size: 14px;
+        padding: 0px 8px;
+        box-sizing: border-box;
+        margin: 3px 0px;
+        background: rgba(207, 216, 220, 0.08);
+        border-radius: 2px;
+      } 
+	  
+	 .list-item:hover{
+		background-color: lightgreen;
+	  }
+
+	.iron-selected {        
+		font-weight: bold;	
+		background-color: lightgreen;		
+	}	  
 	</style>
 
 	<template>
@@ -159,6 +206,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 						<paper-tooltip for="js-download-diagram" position="bottom">Download Workflow</paper-tooltip>
 					</li>
 					<li>
+						<a id="js-simulate-diagram" on-tap="handleTap" class="btn-floating nopointer blue" >
+							<iron-icon icon='send' style="right: 6px;top:5px;"></iron-icon>
+						</a>
+						<paper-tooltip for="js-simulate-diagram" position="bottom">Simulate workflow</paper-tooltip>
+					</li>
+					<li>
 						<a id="js-download-svg" class="btn-floating nopointer blue" disabled="disabled">
 							<iron-icon icon='image:image' style="right: 6px;top:7px;"></iron-icon>
 						</a>
@@ -167,6 +220,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					<li><a id="js-save-diagram" class="btn-floating  nopointer blue" disabled="disabled"><i class="material-icons">save</i>
       </a>
 						<paper-tooltip for="js-save-diagram" position="bottom">Save Workflow</paper-tooltip>
+					</li>
+					<li on-tap="openSaveAsComponent">
+						<a id="js-save-as-component" class="btn-floating nopointer blue" disabled="disabled">
+							<iron-icon icon='shopping-cart' style="right: 6px;top:7px;"></iron-icon>
+						</a>
+						<paper-tooltip for="js-save-as-component" position="bottom">Save as Component</paper-tooltip>
 					</li>
 					<li>
 						<a id="js-open-diagram" class="btn-floating blue">
@@ -278,8 +337,105 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
 				</div>
 			</div>
+			<div id="modal4" class="modal" style="top:2%;max-height:100%">
+				<div class="modal-content">
+					<h4>Save Workflow As Component</h4>
+					<div class="row">
+						<div class="input-field col s6">
+							<input id="bpmnname1" type="text" class="validate">
+							<label for="bpmnname1" data-error='Workflow name need to be unique' required="" aria-required="true">Workflow Name</label>
+							<input id="xmldata1" type="hidden">
+							<input id="version1" type="hidden">
+							<input id="modelId1" type="hidden">
+
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+							<input id="versionmessage1" type="text" class="validate">
+							<label for="versionmessage" data-error='Version message is mandatory' required="" aria-required="true">Version Message</label>
+
+
+
+						</div>
+						<!--<i class="medium material-icons">insert_chart</i>-->
+					</div>
+					
+					<div class="row">
+						<div class="input-field col s6">
+							<input id="description" type="text" class="validate">
+							<label for="description" data-error='Version message is mandatory' required="" aria-required="true"> Description</label>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="input-field col s6">
+							<oe-combo  allow-free-text value="{{domainGroup}}" label="Domain" change="componentGroupChanged" required listdata="{{componentGroups}}">
+									<iron-icon prefix icon="home"></iron-icon>
+							</oe-combo>
+
+						</div>
+					
+						<div class="input-field col s6">
+							<oe-combo  allow-free-text value="{{processGroup}}" label="Group" required listdata="{{domains}}">
+									<iron-icon prefix icon="home"></iron-icon>
+							</oe-combo>
+
+						</div>
+					</div>
+				
+				
+				</div>
+				<div class="modal-footer">
+					<a href="#!" id="save1" on-tap="saveAsComponent" class=" waves-effect waves-green btn-flat">Save</a>
+					<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+				</div>
+			</div>
+			<paper-dialog id="formDialog" modal>
+				<lazy-component id="form-component" url="{{url}}"></lazy-component>
+			</paper-dialog>
+		
+			<paper-dialog id="formDialog2" modal>
+				<oe-input label="Search" value="{{filterVal}}"></oe-input>											
+					<template is="dom-repeat" items={{local.componentList}} initial-count=10 as="rootComp">	
+						<paper-button class="custom-primary"><paper-icon-button on-tap="toggle" icon="image:control-point"></paper-icon-button>{{rootComp.domain}}</paper-button>
+						<iron-collapse id$="{{rootComp.domain}}">
+							<div style="padding-left:10px">
+								<template is="dom-repeat" items={{rootComp.processes}} as="group" >
+									<paper-button class="custom-primary"><paper-icon-button on-tap="toggle" icon="image:control-point"></paper-icon-button>{{group.name}}</paper-button>
+									<iron-collapse id$="{{_trimSpace(group.name)}}">
+									<div style="padding-left:30px">
+										<iron-selector selected="{{local.selectedComponent}}" attr-for-selected="leaf">
+											<template is="dom-repeat" filter="{{_filter(filterVal)}}"  items={{group.components}} as="component">			
+												<div class="list-item" leaf="{{component.name}}">		
+													<span>{{component.name}}</span>
+												</div>						
+											</template>
+										</iron-selector>
+									</div>
+									</iron-collapse>
+							</template>
+							</div>
+						</iron-collapse>
+					</template>
+					<div style="text-align:right">
+					<paper-button style="color:brown;cursor:pointer" dialog-dismiss>Close</paper-button>
+					</div>
+			</paper-dialog>
+			
+			<!--<div id="modal4" class="modal">-->
+			<paper-dialog id="formDialog1" modal>
+				<h4>Provide further inputs</h4>
+					<paper-button class="custom-primary green" style="width:40%" on-tap="completeTask">
+						<oe-i18n-msg msgid="comlete_task">Approve</oe-i18n-msg>
+					</paper-button>	
+			</paper-dialog>
+			<!--</div>-->
 			<div style="display:none">
 				<a id='savelinkd' class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+				<a id='savelinkd1' class="waves-effect waves-light btn modal-trigger" href="#modal4">Modal</a>
+				
 				<a id='openlinkd' class="waves-effect waves-light btn modal-trigger" href="#modal2">Modal2</a>
 			</div>
 			<script src="../oe-workflow-modeler/dist/workflow.min.js"></script>
@@ -293,11 +449,362 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					type:Boolean,
 					value:true
 				},
+				url:{
+					type:String,
+					value: ""
+				},								
+				filterVal: {
+					  type: String,
+					  value: ''
+				},				
+				local: {
+					type: Object,
+					value: function () {
+						return {};
+					}
+				},
 				isPropertiesPanelCollapsed: {
 					type: Boolean,
 					value: false
+				},
+				componentGroups: {
+					type: Array,
+					value:['a','b','c']
+				},
+				domains : {
+					type: Array,
+					value:['a','b','c']
+				},
+				domainGroup: {
+					type:	String,
+					observer: 'componentGroupChanged'	 
+					
+				},
+				processGroup: {
+					type:	String,
 				}
 			},
+			listeners: {
+				'oe-formdata-inserted': '_saveInputs',
+				'pending-stages' : '_pendingStages',
+				'iron-select' : '_componentSelected'
+			},
+			behaviors: [baseUtils.ajaxBehavior],
+			
+			completeTask: function() {
+				
+				// TODO : Once form support is built , a form is shown to end user.
+				var body = {
+					"msg": {"status":"Approved"},
+					"pv": {"status":"Approved"}
+				};
+				
+				this.makeAjaxCall('api/Tasks/' + this.local.taskId + '/complete', 'POST', body, null, null, function (err, response) {
+					
+					this._getProgress(this.local.modelId);					
+					this.$.formDialog1.close();					
+					
+				}.bind(this));
+
+			},
+			_componentSelected : function(e){
+								
+				
+				window.bpmnModeler.get('propertiesPanel').attachTo('#js-properties-panel');
+				this.$.showHidePanelButton.style.right = "320px"
+				this.$.actionButtons.style.right = "370px"
+				
+				document.querySelector('#camunda-callActivity-select').options[0].selected = "selected";
+				var evt = new MouseEvent(('change'), { view: window, bubbles: true, cancelable: true });
+				document.querySelector('#camunda-callActivity-select').dispatchEvent(evt);
+				document.querySelector('#camunda-callable-element-ref').value=this.local.selectedComponent;
+				
+				var bpmnElement = window.bpmnModeler.get('elementRegistry').get(window.currentBpmnCallId);
+				bpmnElement.businessObject.set('calledElement',this.local.selectedComponent);
+				bpmnElement.businessObject.set('name',this.local.selectedComponent); 
+				document.querySelector('#camunda-name').value=this.local.selectedComponent;
+				
+				document.querySelector('[data-element-id='+window.currentBpmnCallId+']').getElementsByTagName('text')[0].children[0].textContent = this.local.selectedComponent;				
+				
+			},
+
+			pendingStages: function(e){
+				
+				// Get pending nodes
+				this.makeAjaxCall('api/'+this.local.modelName+'/'+e.detail.modelId+'/tasks', 'GET',null, null, null, function (err, response) {
+											
+					this.set('local.taskId' , response[0].id)	
+					this.set('local.modelId' , e.detail.modelId)	
+					
+					
+				}.bind(this));
+				
+			},
+			handleTap: function() {
+								
+					window.simulationMode = true;
+						
+					var requestStr = {
+							async: true,
+							crossDomain: true,
+							url: '',
+							method: 'GET',
+							headers: {'cache-control': 'no-cache'}
+					}
+					
+					requestStr.url = '/api/WorkflowManagers/workflows?filter={"where": {"workflowBody.workflowDefinitionName": "' + $('#bpmnname').val() + '" }}';;
+					
+					//	TODO: Use this.makeAjaxCall				
+					$.ajax(requestStr).done(function (response) {
+							
+						if(response[0] === undefined){
+							alert('There is no model attached to workflow. Please attach a model for inputs to start simulation');
+							return;
+						}
+						
+						// TODO: Get the plural from model definition
+						this.local.modelName = response[0].modelName + 's';
+												
+						//Set the url
+						var url = '/api/UIcomponents/component/'+response[0].modelName.toLowerCase()+'-form.html';
+						this.set("url",url);
+												
+						this.$.formDialog.open();
+						this.$.formDialog.resetFit();						
+					
+						
+					}.bind(this));
+					
+			  },
+			_saveInputs: function(){
+											
+				this.$.formDialog.close();
+								
+				this._getProgress(event.detail.data.id);
+								
+			},			
+			_getProgress : function (modelId) {
+				setTimeout(function () {
+					this.makeAjaxCall('api/'+this.local.modelName+'/'+modelId+'/workflow', 'GET',null, null, null, function (err, response) 
+					{
+						var processes = response.processes;  						
+						var completedStages = [];
+						var pendingStages = [];
+						var overlaysArr = [];
+						
+						if ( processes ) {
+							var index = 0;
+							if(window.wfOpenedHistStack) {
+								index = window.wfOpenedHistStack.length;
+							}
+							for(var key in processes[index]._processTokens ) {
+								let tkn = processes[index]._processTokens[key];
+									if(tkn.status === 'complete') {
+										completedStages.push(tkn.bpmnId);
+									}
+									if(tkn.status === 'pending') {
+										pendingStages.push(tkn.bpmnId);
+									}
+								}								
+							}
+						
+							var modeler = window.bpmnModeler;
+							var overlays = modeler.get('overlays');
+							var elementRegistry = modeler.get('elementRegistry');
+														
+							if(this.local.overlaysArr){
+								this.local.overlaysArr.forEach(function(stg){
+									
+									overlays.remove(stg);
+									
+								});	
+							}
+							
+							completedStages.forEach(function(stg){
+								
+								var shape = elementRegistry.get(stg);
+								
+								if(shape){
+								
+									var overlayHtmlGreen = $('<div class="highlight-overlay-green">')
+									.css({
+										width: shape.width,
+										height: shape.height,
+										backgroundColor: "green",
+										opacity: 0.4
+
+									});
+									overlayHtmlGreen.dblclick({shape:shape},function(e) {
+										
+										this._openCallActivity(e);
+										
+									}.bind(this));
+									
+									var temp = overlays.add(stg, {
+										position: {
+											top: 0,
+											left: 0
+										},
+										html: overlayHtmlGreen
+									});
+									overlaysArr.push(temp);
+								}
+								
+							}.bind(this));
+							
+							
+
+							pendingStages.forEach(function(stg){
+								
+								var shape = elementRegistry.get(stg);
+								
+								if(shape){
+								
+									var overlayHtmlRed = $('<div class="highlight-overlay-red">')
+									.css({
+										width: shape.width,
+										height: shape.height,
+										backgroundColor: "red",
+										opacity: 0.4
+
+									});
+									
+									
+									overlayHtmlRed.dblclick({shape:shape},function(e) {	
+									
+										this._openCallActivity(e);
+										
+									}.bind(this));
+									
+									var temp = overlays.add(stg, {
+										position: {
+											top: 0,
+											left: 0
+										},
+										html: overlayHtmlRed
+									});
+								
+									overlaysArr.push(temp);
+									
+									if(shape.type != "bpmn:CallActivity"){
+									
+											var overlayHtmlbutton = $('<paper-button>Continue</paper-button>')
+											.css({											
+												backgroundColor: "green",
+												color: "#FFF"											
+											});
+											
+											overlayHtmlbutton.click(function(e) {									
+												this.$.formDialog1.open();
+											}.bind(this));
+											
+											var temp = overlays.add(stg, {
+											position: {
+												bottom: 0,
+												right: 0
+											},
+											html: overlayHtmlbutton
+											});
+											
+											overlaysArr.push(temp);
+										
+										}
+								
+								}
+								
+							}.bind(this));
+														
+							this.set('local.overlaysArr', overlaysArr);
+							
+							if(pendingStages.length > 0){
+							
+								this.fire('pending-stages', {modelId:modelId});
+							}
+
+					}.bind(this));
+					
+				}.bind(this), 1000);
+							
+			},
+			_openCallActivity : function(e) {
+				  var eventBus = window.bpmnModeler.get('eventBus');
+				  
+				  if(e.data.shape.type != "bpmn:CallActivity") {
+					  return;
+				  }
+				  if(!window.wfOpenedHistStack) {
+					  window.wfOpenedHistStack = [];
+				  }
+				  window.wfOpenedHistStack.push(window.currentWFOpened);	  
+				  var elementRegistry =  bpmnModeler.get('elementRegistry');
+				  var bpmnElement = elementRegistry.get(e.data.shape.id);
+				  var bpmnObj = bpmnElement.businessObject;
+				  window.openDiagramByName(bpmnObj.calledElement);
+				  this._getProgress(this.local.modelId);	
+				  
+			  },
+			 _backToParent : function(){
+					if(window.wfOpenedHistStack) {
+						var bpmnKey = window.wfOpenedHistStack.pop();
+						if(window.wfOpenedHistStack.length == 0) {
+							$("#js-back-to-parent").attr("disabled",true);
+						}
+						if(bpmnKey.id) {
+							window.opendiagram(bpmnKey.id);
+						}else{
+							window.openDiagramByName(bpmnKey.name);
+						}
+						
+						if(window.simulationMode){
+							this._getProgress(this.local.modelId);
+						}
+				}		
+			 },
+			 saveAsComponent: function() {
+				
+				window.saveDiagramAsComponent(this.domainGroup, this.processGroup, this.callback);
+			 },
+			 callback: function() {
+			 },
+			 openSaveAsComponent : function() {
+			
+				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {				
+					console.log(response);
+					var groups = [];
+						for(metadata of response.heirarchy) {
+							groups.push(metadata.domain);
+						}
+						this.set('componentGroups',groups);
+						
+					this.componentGroups = groups;
+					window.openSaveAsComponentPopup();		
+				});	
+				
+				
+				
+			 },
+			 
+			 componentGroupChanged: function() {
+				this.set('processGroup','');
+				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {				
+					console.log(response);
+					var groups = [];
+					groups.push('');
+						for(metadata of response.heirarchy) {
+							if(metadata.domain === this.domainGroup) {
+								for(processGrp of metadata.processes) {
+									groups.push(processGrp.name);
+								}
+							}
+							
+						}
+						this.set('domains',groups);
+						
+					
+					window.openSaveAsComponentPopup();		
+				});
+				
+			 },
 			ready: function () {
 				//bpmndata http://localhost:3000/api/ModelDefinitions?filter=%7B%22where%22%20%20%3A%20%20%7B%22name%22%3A%22bpmndata%22%7D%20%7D
 				var ctx = this;
@@ -308,6 +815,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					ctx.isSaveable = (data && data.length>0)? false: true;
 					
 				});
+				
+				this.$.formDialog.noCancelOnEscKey = false;				
+				this.$.formDialog1.noCancelOnEscKey = false;
+								
+				
 				// this.scopeSubtree(this.$.container, false);
 			},
 			togglePropertiesPanel: function() {
@@ -341,7 +853,42 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 						this._getProgress(this.local.modelId);
 					}
 				}		
-			 }
+			 },
+			toggle: function(e){
+				
+				if(e.model.rootComp){
+					this.$$('#'+e.model.rootComp.domain).toggle();
+				}
+				
+				if(e.model.group){
+					this.$$('#'+this._trimSpace(e.model.group.name)).toggle();
+				}
+				
+				if(e.target.icon && e.target.icon === 'image:control-point' ){
+					e.target.set('icon','icons:remove')
+				}else{
+					e.target.set('icon','image:control-point')
+				}
+				
+				
+				
+			},
+			_trimSpace	:  function(val){
+				return val.replace(/\s/g, '');
+			} ,
+			_filter: function (val) {
+					
+					return function (model) {
+					  if (!val) {
+						return true;
+					  }
+					  if (!model) {
+						return false;
+					  }
+					  return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
+					}
+			  }	
+
 		});
 	</script>
 </dom-module>

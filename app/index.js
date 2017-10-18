@@ -69,6 +69,32 @@ var logger = function()
 logger.disableLogger();
 //logger.enableLogger();
 var eventBus = bpmnModeler.get('eventBus');
+eventBus.on('element.click', function(e){
+	var id = e.element.id;
+	
+	if(id.indexOf('Call')!=-1){
+		window.currentBpmnCallId = id;
+		var overlays = bpmnModeler.get('overlays');
+		var overlayHtmlbutton = $('<iron-icon icon="icons:settings"></iron-icon>');				
+		var temp = overlays.add(id, {position: {
+												bottom:0 ,
+												right: 0
+											},
+											html: overlayHtmlbutton
+										});
+												
+		overlayHtmlbutton.click(function(e) {
+			
+			// Get compoenent hierachy and set into WF component variable
+			$.get("/api/WorkflowComponentMetadatas/componentHeirarchy", function(response){								
+				document.querySelector('work-flow').set('local.componentList',response.heirarchy);		
+			//		this.set('local.componentList',response.heirarchy);
+			});	
+		
+			document.querySelector('#formDialog2').open();
+		});
+	}
+});
 eventBus.on('element.dblclick',drillDown);
 
 function drillDown(e) {
@@ -284,15 +310,21 @@ $(document).on('ready', function() {
   });
   var xmldata = '';
   var downloadLink = $('#js-download-diagram');
-  var downloadSvgLink = $('#js-download-svg');
+  var simulateLink = $('#js-simulate-diagram');
+  var downloadSvgLink = $('#js-download-svg')
   var saveLink = $('#js-save-diagram');
   var publishLink = $('#js-publish-diagram');
+  var saveAsComponentLink = $('#js-save-as-component');
+
   $('#js-save-diagram').click(function() {
     // alert("test");
     //  console.log($('#savelinkd'));
     // $('#savelinkd').click();
     window.openSave(xmldata);
   });
+	window.openSaveAsComponentPopup = function() {
+			window.openSaveAsComponent(xmldata);
+	}
 
   function saveData(link, name, data) {
     var encodedData = encodeURIComponent(data);
@@ -354,11 +386,17 @@ $(document).on('ready', function() {
     saveDiagram(function(err, xml) {
       saveData(saveLink, 'diagram.bpmn', err ? null : xml);
     });
+	saveDiagram(function(err, xml) {
+      saveData(simulateLink, 'diagram.bpmn', err ? null : xml);
+    });
     saveDiagram(function(err, xml) {
       saveData(publishLink, 'diagram.bpmn', err ? null : xml);
     });
     saveDiagram(function(err, xml) {
       setEncoded(downloadLink, 'diagram.bpmn', err ? null : xml);
+    });
+	saveDiagram(function(err, xml) {
+      saveData(saveAsComponentLink, 'diagram.bpmn', err ? null : xml);
     });
   }, 500);
 

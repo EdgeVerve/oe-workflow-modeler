@@ -29,6 +29,12 @@ window.openSave = function (data) {
     $('#savelinkd').click();
 
 };
+window.openSaveAsComponent = function (data) {
+    //console.log('data===>>>' + data);
+    $('#xmldata1').val(data);
+    $('#savelinkd1').click();
+
+};
 var callback;
 $('#savebpmnbtn').click(function () {
     event.preventDefault();
@@ -84,6 +90,22 @@ function saveDiagram(callback) {
 }
 
 
+window.saveDiagramAsComponent = function(domainGroup, processGroup, callback) {
+    if ($('#bpmnname1').val() === '') {
+        $('#bpmnname1').removeClass('valid');
+        $('#bpmnname1').addClass('invalid');
+
+    } else if ($('#versionmessage1').val() === '') {
+        $('#versionmessage1').removeClass('valid');
+        $('#versionmessage1').addClass('invalid');
+    } else if ($('#version1').val() !== '') {
+        ajaxSave1();
+
+    } else {
+        validateAndSaveFile1(domainGroup, processGroup, callback);
+
+    }
+}
 function opendiagram(id) {
     var version = $('#' + $.trim(id)).val();
     window.createDiagram(generalXMLDef[version].data);
@@ -99,6 +121,7 @@ window.opendiagram = opendiagram;
 
 
 $('#js-open-diagram').click(function () {
+	window.simulationMode = false;
     var tenantId = sessionStorage.getItem('tenantId');
     var accessToken = sessionStorage.getItem('auth_token');
     var bpmnurl = '/api/bpmndata'; //?filter=[where][tenant]=' + tenantId + '&access_token=' + accessToken;
@@ -191,6 +214,146 @@ function formatDate(date) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + strTime;
+}
+
+
+function validateAndSaveFile1(domainGroup, processGroup, callback) {
+    var tenantId = sessionStorage.getItem('tenantId');
+    var accessToken = sessionStorage.getItem('auth_token');
+    //filter=[where][and][0][tenant]=default&filter[where][and][1][bpmnname]=
+    var bpmnurl = '/api/bpmndata?filter[where][and][1][bpmnname]=' + $('#bpmnname1').val(); // + '&filter=[where][and][0][tenant]=' + tenantId + '&&access_token=' + accessToken;
+    var settingsHistory = {
+        'async': true,
+        'crossDomain': true,
+        'url': bpmnurl,
+        'method': 'GET',
+        'headers': {
+            'cache-control': 'no-cache'
+        },
+        'error': function () {
+            alert('something went wrong');
+        }
+    };
+    $.ajax(settingsHistory).done(function (response) {
+        //console.log(response);
+        if (response.length === 0) {
+            ajaxSave1(domainGroup, processGroup, callback);
+        } else {
+            $('#bpmnname1').removeClass('valid');
+            $('#bpmnname1').addClass('invalid');
+            $('#bpmnname1').prop('aria-invalid', 'true');
+            //  event.preventDefault();
+
+        }
+
+    });
+    return true;
+}
+
+
+function ajaxSave1(domainGroup, processGroup, callback) {
+    $('#bpmnname1').addClass('valid');
+    $('#bpmnname1').removeClass('invalid');
+    $('#versionmessage1').addClass('valid');
+    $('#versionmessage1').removeClass('invalid');
+    //console.log("Validation success..............................");//versionmessage
+    var accessToken = sessionStorage.getItem('auth_token');
+    var tenantId = sessionStorage.getItem('tenantId');
+    var postUrl = '';
+    var settings = {
+        'async': true,
+        'crossDomain': true,
+        //"url":postUrl,
+        'method': 'POST',
+        'headers': {
+            'content-type': 'application/json',
+            'cache-control': 'no-cache'
+        },
+        'processData': false
+    };
+    var data;
+    if ((window.currentFileStatus && window.currentFileStatus === 'new') || (window.currFileName != $('#bpmnname').val())) {
+        postUrl = '/api/bpmndata'; //?access_token=' + accessToken;
+        data = {
+            bpmnname: $('#bpmnname1').val(),
+            tenant: tenantId,
+            xmldata: $('#xmldata1').val(),
+            versionmessage: $('#versionmessage1').val()
+        };
+        settings.data = JSON.stringify(data);
+        settings.url = postUrl;
+    } else if (window.currentFileStatus === 'old') {
+        postUrl = '/api/bpmndata/' + $('#modelId1').val(); // + '?access_token=' + accessToken;
+        data = {
+            bpmnname: $('#bpmnname1').val(),
+            tenant: tenantId,
+            xmldata: $('#xmldata1').val(),
+            _version: $('#version1').val(),
+            versionmessage: $('#versionmessage1').val()
+
+        };
+        settings.method = 'PUT';
+        settings.url = postUrl;
+        settings.data = JSON.stringify(data);
+    }
+    //console.log(data);
+
+    $.ajax(settings).done(function (response) {
+        //console.log(response);
+        window.currentFileStatus = 'old';
+        window.currFileName = response.bpmnname;
+        $('#version1').val(response._version);
+        $('#modelId1').val(response.id);
+        $('#modal1').closeModal();
+		$('#modal4').closeModal();
+        if (callback) {
+            callback();
+            callback = undefined;
+        }
+		saveComponentDetails(domainGroup, processGroup, response);
+
+    }).fail(function (xhr, status, errorThrown) {
+        alert('Sorry, there was a problem!');
+        //console.log("Error: " + errorThrown);
+        //console.log("Status: " + status);
+        //console.dir(xhr);
+    });
+}
+
+function saveComponentDetails(domainGroup, processGroup, response) {
+	var accessToken = sessionStorage.getItem('auth_token');
+    var tenantId = sessionStorage.getItem('tenantId');
+    var postUrl = '';
+    var settings = {
+        'async': true,
+        'crossDomain': true,
+        //"url":postUrl,
+        'method': 'POST',
+        'headers': {
+            'content-type': 'application/json',
+            'cache-control': 'no-cache'
+        },
+        'processData': false
+    };
+	var data;
+	postUrl = '/api/WorkflowComponentMetadatas'; //?access_token=' + accessToken;
+        data = {
+            bpmnName: response.bpmnname,
+            tenant: tenantId,
+            bpmnId: response.id,
+			description: $('#description').val(),
+            domainGroup: domainGroup,
+			processGroup: processGroup
+        };
+        settings.data = JSON.stringify(JSON.parse(JSON.stringify(data)));
+        settings.url = postUrl;
+		$.ajax(settings).done(function (response) {
+			
+		})
+		.fail(function(err)
+		{
+			alert('Failed to save as component');
+			});
 }
 
 function validateAndSaveFile(callback) {
