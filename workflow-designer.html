@@ -34,20 +34,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <div class="module-container">
       <iframe src='./workflow.html' style="width:100%;height:calc(100vh - 40px);border:none;"></iframe>
     </div>
-    <app-toolbar>
-      <iron-icon class="application-logo" src="./dist/images/Logo.png" on-tap="toggleLeftDrawer"></iron-icon>
-      <div class="flex">
-        <module-switcher></module-switcher>
-      </div>
-      <tenant-info></tenant-info>
-    </app-toolbar>
   </template>
   <script>
     Polymer({
-      is: 'workflow-designer',
-      toggleLeftDrawer: function () {
-        this.fire('toggle-left-drawer');
-      }
+      is: 'workflow-designer'
     });
   </script>
 </dom-module>
