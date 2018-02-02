@@ -36,6 +36,7 @@ window.openSaveAsComponent = function (data) {
 
 };
 var callback;
+var bpmnId;
 $('#savebpmnbtn').click(function () {
     event.preventDefault();
 
@@ -235,7 +236,6 @@ function validateAndSaveFile1(domainGroup, processGroup, callback) {
         }
     };
     $.ajax(settingsHistory).done(function (response) {
-        //console.log(response);
         if (response.length === 0) {
             ajaxSave1(domainGroup, processGroup, callback);
         } else {
@@ -400,9 +400,8 @@ function ajaxSave(callback) {
     var accessToken = sessionStorage.getItem('auth_token');
     var tenantId = sessionStorage.getItem('tenantId');
     var postUrl = '';
-    var bpmnId = '';
     var settings = {
-        'async': false,
+        'async': true,
         'crossDomain': true,
         //"url":postUrl,
         'method': 'POST',
@@ -448,7 +447,7 @@ function ajaxSave(callback) {
         $('#modelId').val(response.id);
         $('#modal1').closeModal();
         if (callback) {
-            callback();
+            callback(bpmnId);
             callback = undefined;
         }
 
@@ -462,7 +461,7 @@ function ajaxSave(callback) {
 
 $('#js-publish-diagram').click(function () {
     if (window.currentFileStatus != 'new') {
-        publishWorkflow();
+        publishWorkflow(bpmnId);
     } else {
         callback = publishWorkflow;
         $('#js-save-diagram')[0].click()
@@ -472,7 +471,7 @@ $('#js-publish-diagram').click(function () {
 
 });
 
-var publishWorkflow = function () {
+var publishWorkflow = function (bpmnId) {
     //console.log('publishing......');
     if (window.currentFileStatus != 'new') {
         var accessToken = sessionStorage.getItem('auth_token');
