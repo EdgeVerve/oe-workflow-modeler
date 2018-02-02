@@ -400,8 +400,9 @@ function ajaxSave(callback) {
     var accessToken = sessionStorage.getItem('auth_token');
     var tenantId = sessionStorage.getItem('tenantId');
     var postUrl = '';
+    var bpmnId = '';
     var settings = {
-        'async': true,
+        'async': false,
         'crossDomain': true,
         //"url":postUrl,
         'method': 'POST',
@@ -442,6 +443,7 @@ function ajaxSave(callback) {
         //console.log(response);
         window.currentFileStatus = 'old';
         window.currFileName = response.bpmnname;
+        bpmnId = response.id;
         $('#version').val(response._version);
         $('#modelId').val(response.id);
         $('#modal1').closeModal();
@@ -489,11 +491,10 @@ var publishWorkflow = function () {
             'processData': false
         };
         var data = {
-            name: $('#bpmnname').val(),
-            tenant: tenantId,
-            xmldata: $('#xmldata').val()
-
-
+          name: $('#bpmnname').val(),
+          tenant: tenantId,
+          xmldata: $('#xmldata').val(),
+          bpmndataId: bpmnId
         };
         settings.data = JSON.stringify(data);
         $.ajax(settings).done(function (response) {
