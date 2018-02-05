@@ -36,6 +36,7 @@ window.openSaveAsComponent = function (data) {
 
 };
 var callback;
+var bpmnId;
 $('#savebpmnbtn').click(function () {
     event.preventDefault();
 
@@ -235,7 +236,6 @@ function validateAndSaveFile1(domainGroup, processGroup, callback) {
         }
     };
     $.ajax(settingsHistory).done(function (response) {
-        //console.log(response);
         if (response.length === 0) {
             ajaxSave1(domainGroup, processGroup, callback);
         } else {
@@ -442,11 +442,12 @@ function ajaxSave(callback) {
         //console.log(response);
         window.currentFileStatus = 'old';
         window.currFileName = response.bpmnname;
+        bpmnId = response.id;
         $('#version').val(response._version);
         $('#modelId').val(response.id);
         $('#modal1').closeModal();
         if (callback) {
-            callback();
+            callback(bpmnId);
             callback = undefined;
         }
 
@@ -460,7 +461,7 @@ function ajaxSave(callback) {
 
 $('#js-publish-diagram').click(function () {
     if (window.currentFileStatus != 'new') {
-        publishWorkflow();
+        publishWorkflow(bpmnId);
     } else {
         callback = publishWorkflow;
         $('#js-save-diagram')[0].click()
@@ -470,7 +471,7 @@ $('#js-publish-diagram').click(function () {
 
 });
 
-var publishWorkflow = function () {
+var publishWorkflow = function (bpmnId) {
     //console.log('publishing......');
     if (window.currentFileStatus != 'new') {
         var accessToken = sessionStorage.getItem('auth_token');
@@ -489,11 +490,10 @@ var publishWorkflow = function () {
             'processData': false
         };
         var data = {
-            name: $('#bpmnname').val(),
-            tenant: tenantId,
-            xmldata: $('#xmldata').val()
-
-
+          name: $('#bpmnname').val(),
+          tenant: tenantId,
+          xmldata: $('#xmldata').val(),
+          bpmndataId: bpmnId
         };
         settings.data = JSON.stringify(data);
         $.ajax(settings).done(function (response) {
