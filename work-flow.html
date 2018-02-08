@@ -597,7 +597,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 							if(window.wfOpenedHistStack) {
 								index = window.wfOpenedHistStack.length;
 							}
-							Object.keys(processes[index]._processTokens).forEach(function(key) {
+							processes[index]._processTokens && Object.keys(processes[index]._processTokens).forEach(function(key) {
 								let tkn = processes[index]._processTokens[key];
 								if(tkn.status === 'complete') {
 									completedStages.push(tkn.bpmnId);
