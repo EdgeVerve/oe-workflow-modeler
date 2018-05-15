@@ -1,8 +1,8 @@
 <!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
 The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
-The Program may contain/reference third party or open source components, the rights to which continue to 
-remain with the applicable third party licensors or the open source community as the case may be and nothing 
-here transfers the rights to the third party and open source components, except as expressly permitted. 
+The Program may contain/reference third party or open source components, the rights to which continue to
+remain with the applicable third party licensors or the open source community as the case may be and nothing
+here transfers the rights to the third party and open source components, except as expressly permitted.
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -100,10 +100,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 			font-family: 'Roboto-Light';
 		}
 		.custom-primary {
-			cursor: pointer;				
+			cursor: pointer;
 			display:block;
-			}		
-			
+			}
+
 		.green {
 			background-color: green;
 			border-color: green;
@@ -120,8 +120,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 		}
 	.iron-selected {
 		font-weight: bold;
-	}	
-	
+	}
+
 	.list-item {
         height: 36px;
         line-height: 36px;
@@ -133,16 +133,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         margin: 3px 0px;
         background: rgba(207, 216, 220, 0.08);
         border-radius: 2px;
-      } 
-	  
+      }
+
 	 .list-item:hover{
 		background-color: lightgreen;
 	  }
 
-	.iron-selected {        
-		font-weight: bold;	
-		background-color: lightgreen;		
-	}	  
+	.iron-selected {
+		font-weight: bold;
+		background-color: lightgreen;
+	}
 	</style>
 
 	<template>
@@ -183,9 +183,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				<a id="toggle-prop-panel" class="btn-floating  blue" >
 					<iron-icon icon='settings-ethernet' style="right: -5px;top: 6px;"></iron-icon>
 				</a>
-				<paper-tooltip for="toggle-prop-panel" position="bottom">Show/Hide Properties panel</paper-tooltip>			
+				<paper-tooltip for="toggle-prop-panel" position="bottom">Show/Hide Properties panel</paper-tooltip>
 			</div>
-			
+
 			<div class="fixed-action-btn horizontal click-to-toggle" id="actionButtons" style="right: 370px;top: 23px;bottom:95%">
 				<a class="btn-floating btn-large blue">
 					<i class="material-icons">menu</i>
@@ -198,7 +198,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 						</a>
 						<paper-tooltip for="js-back-to-paremt" position="bottom">Go back to parent</paper-tooltip>
 					</li>
-					
+
 					<li>
 						<a id="js-download-diagram" class="btn-floating nopointer blue" disabled="disabled">
 							<iron-icon icon='file-download' style="right: 6px;"></iron-icon>
@@ -313,7 +313,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 <option value="674c2378-a158-4405-9481-37bcca4a0ab5">674c2378-a158-4405-9481-37bcca4a0ab5</option>
                 </select>
                 </td>
-            <td>  
+            <td>
                 <button class="opendg btn-floating btn-large waves-effect waves-light red ">
                 <i class="material-icons">folder_open</i>
                 </button>
@@ -361,14 +361,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 						</div>
 						<!--<i class="medium material-icons">insert_chart</i>-->
 					</div>
-					
+
 					<div class="row">
 						<div class="input-field col s6">
 							<input id="description" type="text" class="validate">
 							<label for="description" data-error='Version message is mandatory' required="" aria-required="true"> Description</label>
 						</div>
 					</div>
-					
+
 					<div class="row">
 						<div class="input-field col s6">
 							<oe-combo  allow-free-text value="{{domainGroup}}" label="Domain" change="componentGroupChanged" required listdata="{{componentGroups}}">
@@ -376,7 +376,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 							</oe-combo>
 
 						</div>
-					
+
 						<div class="input-field col s6">
 							<oe-combo  allow-free-text value="{{processGroup}}" label="Group" required listdata="{{domains}}">
 									<iron-icon prefix icon="home"></iron-icon>
@@ -384,8 +384,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
 						</div>
 					</div>
-				
-				
+
+
 				</div>
 				<div class="modal-footer">
 					<a href="#!" id="save1" on-tap="saveAsComponent" class=" waves-effect waves-green btn-flat">Save</a>
@@ -395,10 +395,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 			<paper-dialog id="formDialog" modal>
 				<lazy-component id="form-component" url="{{url}}"></lazy-component>
 			</paper-dialog>
-		
+
 			<paper-dialog id="formDialog2" modal>
-				<oe-input label="Search" value="{{filterVal}}"></oe-input>											
-					<template is="dom-repeat" items={{local.componentList}} initial-count=10 as="rootComp">	
+				<oe-input label="Search" value="{{filterVal}}"></oe-input>
+					<template is="dom-repeat" items={{local.componentList}} initial-count=10 as="rootComp">
 						<paper-button class="custom-primary"><paper-icon-button on-tap="toggle" icon="image:control-point"></paper-icon-button>{{rootComp.domain}}</paper-button>
 						<iron-collapse id$="{{rootComp.domain}}">
 							<div style="padding-left:10px">
@@ -407,10 +407,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 									<iron-collapse id$="{{_trimSpace(group.name)}}">
 									<div style="padding-left:30px">
 										<iron-selector selected="{{local.selectedComponent}}" attr-for-selected="leaf">
-											<template is="dom-repeat" filter="{{_filter(filterVal)}}"  items={{group.components}} as="component">			
-												<div class="list-item" leaf="{{component.name}}">		
+											<template is="dom-repeat" filter="{{_filter(filterVal)}}"  items={{group.components}} as="component">
+												<div class="list-item" leaf="{{component.name}}">
 													<span>{{component.name}}</span>
-												</div>						
+												</div>
 											</template>
 										</iron-selector>
 									</div>
@@ -423,19 +423,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					<paper-button style="color:brown;cursor:pointer" dialog-dismiss>Close</paper-button>
 					</div>
 			</paper-dialog>
-			
+
 			<!--<div id="modal4" class="modal">-->
 			<paper-dialog id="formDialog1" modal>
 				<h4>Provide further inputs</h4>
 					<paper-button class="custom-primary green" style="width:40%" on-tap="completeTask">
 						<oe-i18n-msg msgid="comlete_task">Approve</oe-i18n-msg>
-					</paper-button>	
+					</paper-button>
 			</paper-dialog>
 			<!--</div>-->
 			<div style="display:none">
 				<a id='savelinkd' class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
 				<a id='savelinkd1' class="waves-effect waves-light btn modal-trigger" href="#modal4">Modal</a>
-				
+
 				<a id='openlinkd' class="waves-effect waves-light btn modal-trigger" href="#modal2">Modal2</a>
 			</div>
 			<script src="../oe-workflow-modeler/dist/workflow.min.js"></script>
@@ -452,11 +452,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				url:{
 					type:String,
 					value: ""
-				},								
+				},
 				filterVal: {
 					  type: String,
 					  value: ''
-				},				
+				},
 				local: {
 					type: Object,
 					value: function () {
@@ -477,8 +477,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				},
 				domainGroup: {
 					type:	String,
-					observer: 'componentGroupChanged'	 
-					
+					observer: 'componentGroupChanged'
+
 				},
 				processGroup: {
 					type:	String,
@@ -490,60 +490,60 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				'iron-select' : '_componentSelected'
 			},
 			behaviors: [baseUtils.ajaxBehavior],
-			
+
 			completeTask: function() {
-				
+
 				// TODO : Once form support is built , a form is shown to end user.
 				var body = {
 					"msg": {"status":"Approved"},
 					"pv": {"status":"Approved"}
 				};
-				
+
 				this.makeAjaxCall('api/Tasks/' + this.local.taskId + '/complete', 'POST', body, null, null, function (err, response) {
-					
-					this._getProgress(this.local.modelId);					
-					this.$.formDialog1.close();					
-					
+
+					this._getProgress(this.local.modelId);
+					this.$.formDialog1.close();
+
 				}.bind(this));
 
 			},
 			_componentSelected : function(e){
-								
-				
+
+
 				window.bpmnModeler.get('propertiesPanel').attachTo('#js-properties-panel');
 				this.$.showHidePanelButton.style.right = "320px"
 				this.$.actionButtons.style.right = "370px"
-				
+
 				document.querySelector('#camunda-callActivity-select').options[0].selected = "selected";
 				var evt = new MouseEvent(('change'), { view: window, bubbles: true, cancelable: true });
 				document.querySelector('#camunda-callActivity-select').dispatchEvent(evt);
 				document.querySelector('#camunda-callable-element-ref').value=this.local.selectedComponent;
-				
+
 				var bpmnElement = window.bpmnModeler.get('elementRegistry').get(window.currentBpmnCallId);
 				bpmnElement.businessObject.set('calledElement',this.local.selectedComponent);
-				bpmnElement.businessObject.set('name',this.local.selectedComponent); 
+				bpmnElement.businessObject.set('name',this.local.selectedComponent);
 				document.querySelector('#camunda-name').value=this.local.selectedComponent;
-				
-				document.querySelector('[data-element-id='+window.currentBpmnCallId+']').getElementsByTagName('text')[0].children[0].textContent = this.local.selectedComponent;				
-				
+
+				document.querySelector('[data-element-id='+window.currentBpmnCallId+']').getElementsByTagName('text')[0].children[0].textContent = this.local.selectedComponent;
+
 			},
 
 			pendingStages: function(e){
-				
+
 				// Get pending nodes
 				this.makeAjaxCall('api/'+this.local.modelName+'/'+e.detail.modelId+'/tasks', 'GET',null, null, null, function (err, response) {
-											
-					this.set('local.taskId' , response[0].id)	
-					this.set('local.modelId' , e.detail.modelId)	
-					
-					
+
+					this.set('local.taskId' , response[0].id)
+					this.set('local.modelId' , e.detail.modelId)
+
+
 				}.bind(this));
-				
+
 			},
 			handleTap: function() {
-								
+
 					window.simulationMode = true;
-						
+
 					var requestStr = {
 							async: true,
 							crossDomain: true,
@@ -551,81 +551,81 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 							method: 'GET',
 							headers: {'cache-control': 'no-cache'}
 					}
-					
+
 					requestStr.url = '/api/WorkflowManagers/workflows?filter={"where": {"workflowBody.workflowDefinitionName": "' + $('#bpmnname').val() + '" }}';;
-					
-					//	TODO: Use this.makeAjaxCall				
+
+					//	TODO: Use this.makeAjaxCall
 					$.ajax(requestStr).done(function (response) {
-							
+
 						if(response[0] === undefined){
 							alert('There is no model attached to workflow. Please attach a model for inputs to start simulation');
 							return;
 						}
-						
+
 						// TODO: Get the plural from model definition
 						this.local.modelName = response[0].modelName + 's';
-												
+
 						//Set the url
 						var url = '/api/UIcomponents/component/'+response[0].modelName.toLowerCase()+'-form.html';
 						this.set("url",url);
-												
+
 						this.$.formDialog.open();
-						this.$.formDialog.resetFit();						
-					
-						
+						this.$.formDialog.resetFit();
+
+
 					}.bind(this));
-					
+
 			  },
 			_saveInputs: function(){
-											
+
 				this.$.formDialog.close();
-								
+
 				this._getProgress(event.detail.data.id);
-								
-			},			
+
+			},
 			_getProgress : function (modelId) {
 				setTimeout(function () {
-					this.makeAjaxCall('api/'+this.local.modelName+'/'+modelId+'/workflow', 'GET',null, null, null, function (err, response) 
+					this.makeAjaxCall('api/'+this.local.modelName+'/'+modelId+'/workflow', 'GET',null, null, null, function (err, response)
 					{
-						var processes = response.processes;  						
+						var processes = response.processes;
 						var completedStages = [];
 						var pendingStages = [];
 						var overlaysArr = [];
-						
+
 						if ( processes ) {
 							var index = 0;
 							if(window.wfOpenedHistStack) {
 								index = window.wfOpenedHistStack.length;
 							}
-							for(var key in processes[index]._processTokens ) {
+							processes[index]._processTokens && Object.keys(processes[index]._processTokens).forEach(function(key) {
 								let tkn = processes[index]._processTokens[key];
-									if(tkn.status === 'complete') {
-										completedStages.push(tkn.bpmnId);
-									}
-									if(tkn.status === 'pending') {
-										pendingStages.push(tkn.bpmnId);
-									}
-								}								
+								if(tkn.status === 'complete') {
+									completedStages.push(tkn.bpmnId);
+								}
+								if(tkn.status === 'pending') {
+									pendingStages.push(tkn.bpmnId);
+								}
+							});
 							}
-						
+
 							var modeler = window.bpmnModeler;
 							var overlays = modeler.get('overlays');
 							var elementRegistry = modeler.get('elementRegistry');
-														
+
 							if(this.local.overlaysArr){
 								this.local.overlaysArr.forEach(function(stg){
-									
+
 									overlays.remove(stg);
-									
-								});	
+
+								});
 							}
-							
+
 							completedStages.forEach(function(stg){
-								
+
 								var shape = elementRegistry.get(stg);
-								
+
 								if(shape){
-								
+
 									var overlayHtmlGreen = $('<div class="highlight-overlay-green">')
 									.css({
 										width: shape.width,
@@ -635,11 +635,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
 									});
 									overlayHtmlGreen.dblclick({shape:shape},function(e) {
-										
+
 										this._openCallActivity(e);
-										
+
 									}.bind(this));
-									
+
 									var temp = overlays.add(stg, {
 										position: {
 											top: 0,
@@ -649,17 +649,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 									});
 									overlaysArr.push(temp);
 								}
-								
+
 							}.bind(this));
-							
-							
+
+
 
 							pendingStages.forEach(function(stg){
-								
+
 								var shape = elementRegistry.get(stg);
-								
+
 								if(shape){
-								
+
 									var overlayHtmlRed = $('<div class="highlight-overlay-red">')
 									.css({
 										width: shape.width,
@@ -668,14 +668,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 										opacity: 0.4
 
 									});
-									
-									
-									overlayHtmlRed.dblclick({shape:shape},function(e) {	
-									
+
+
+									overlayHtmlRed.dblclick({shape:shape},function(e) {
+
 										this._openCallActivity(e);
-										
+
 									}.bind(this));
-									
+
 									var temp = overlays.add(stg, {
 										position: {
 											top: 0,
@@ -683,21 +683,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 										},
 										html: overlayHtmlRed
 									});
-								
+
 									overlaysArr.push(temp);
-									
+
 									if(shape.type != "bpmn:CallActivity"){
-									
+
 											var overlayHtmlbutton = $('<paper-button>Continue</paper-button>')
-											.css({											
+											.css({
 												backgroundColor: "green",
-												color: "#FFF"											
+												color: "#FFF"
 											});
-											
-											overlayHtmlbutton.click(function(e) {									
+
+											overlayHtmlbutton.click(function(e) {
 												this.$.formDialog1.open();
 											}.bind(this));
-											
+
 											var temp = overlays.add(stg, {
 											position: {
 												bottom: 0,
@@ -705,43 +705,43 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 											},
 											html: overlayHtmlbutton
 											});
-											
+
 											overlaysArr.push(temp);
-										
+
 										}
-								
+
 								}
-								
+
 							}.bind(this));
-														
+
 							this.set('local.overlaysArr', overlaysArr);
-							
+
 							if(pendingStages.length > 0){
-							
+
 								this.fire('pending-stages', {modelId:modelId});
 							}
 
 					}.bind(this));
-					
+
 				}.bind(this), 1000);
-							
+
 			},
 			_openCallActivity : function(e) {
 				  var eventBus = window.bpmnModeler.get('eventBus');
-				  
+
 				  if(e.data.shape.type != "bpmn:CallActivity") {
 					  return;
 				  }
 				  if(!window.wfOpenedHistStack) {
 					  window.wfOpenedHistStack = [];
 				  }
-				  window.wfOpenedHistStack.push(window.currentWFOpened);	  
+				  window.wfOpenedHistStack.push(window.currentWFOpened);
 				  var elementRegistry =  bpmnModeler.get('elementRegistry');
 				  var bpmnElement = elementRegistry.get(e.data.shape.id);
 				  var bpmnObj = bpmnElement.businessObject;
 				  window.openDiagramByName(bpmnObj.calledElement);
-				  this._getProgress(this.local.modelId);	
-				  
+				  this._getProgress(this.local.modelId);
+
 			  },
 			 _backToParent : function(){
 					if(window.wfOpenedHistStack) {
@@ -754,39 +754,39 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 						}else{
 							window.openDiagramByName(bpmnKey.name);
 						}
-						
+
 						if(window.simulationMode){
 							this._getProgress(this.local.modelId);
 						}
-				}		
+				}
 			 },
 			 saveAsComponent: function() {
-				
+
 				window.saveDiagramAsComponent(this.domainGroup, this.processGroup, this.callback);
 			 },
 			 callback: function() {
 			 },
 			 openSaveAsComponent : function() {
-			
-				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {				
+
+				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {
 					console.log(response);
 					var groups = [];
 						for(metadata of response.heirarchy) {
 							groups.push(metadata.domain);
 						}
 						this.set('componentGroups',groups);
-						
+
 					this.componentGroups = groups;
-					window.openSaveAsComponentPopup();		
-				});	
-				
-				
-				
+					window.openSaveAsComponentPopup();
+				});
+
+
+
 			 },
-			 
+
 			 componentGroupChanged: function() {
 				this.set('processGroup','');
-				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {				
+				$.get("/api/WorkflowComponentMetadatas/componentHeirarchy",  (response) => {
 					console.log(response);
 					var groups = [];
 					groups.push('');
@@ -796,14 +796,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 									groups.push(processGrp.name);
 								}
 							}
-							
+
 						}
 						this.set('domains',groups);
-						
-					
-					window.openSaveAsComponentPopup();		
+
+
+					window.openSaveAsComponentPopup();
 				});
-				
+
 			 },
 			ready: function () {
 				//bpmndata http://localhost:3000/api/ModelDefinitions?filter=%7B%22where%22%20%20%3A%20%20%7B%22name%22%3A%22bpmndata%22%7D%20%7D
@@ -813,13 +813,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				//	alert("Load was performed.");
 					console.log(data)
 					ctx.isSaveable = (data && data.length>0)? false: true;
-					
+
 				});
-				
-				this.$.formDialog.noCancelOnEscKey = false;				
+
+				this.$.formDialog.noCancelOnEscKey = false;
 				this.$.formDialog1.noCancelOnEscKey = false;
-								
-				
+
+
 				// this.scopeSubtree(this.$.container, false);
 			},
 			togglePropertiesPanel: function() {
@@ -829,7 +829,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					$("#js-canvas").css('width','100%');
 					this.$.showHidePanelButton.style.right = "5px"
 					this.$.actionButtons.style.right = "55px"
-						
+
 				}else{
 					propertiesPanel.attachTo('#js-properties-panel');
 					this.$.showHidePanelButton.style.right = "320px"
@@ -848,36 +848,36 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					}else{
 						window.openDiagramByName(bpmnKey.name);
 					}
-					
+
 					if(window.simulationMode){
 						this._getProgress(this.local.modelId);
 					}
-				}		
+				}
 			 },
 			toggle: function(e){
-				
+
 				if(e.model.rootComp){
 					this.$$('#'+e.model.rootComp.domain).toggle();
 				}
-				
+
 				if(e.model.group){
 					this.$$('#'+this._trimSpace(e.model.group.name)).toggle();
 				}
-				
+
 				if(e.target.icon && e.target.icon === 'image:control-point' ){
 					e.target.set('icon','icons:remove')
 				}else{
 					e.target.set('icon','image:control-point')
 				}
-				
-				
-				
+
+
+
 			},
 			_trimSpace	:  function(val){
 				return val.replace(/\s/g, '');
 			} ,
 			_filter: function (val) {
-					
+
 					return function (model) {
 					  if (!val) {
 						return true;
@@ -887,7 +887,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					  }
 					  return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
 					}
-			  }	
+			  }
 
 		});
 	</script>
