@@ -5,7 +5,7 @@
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/edgeverve"
+    "url": "https://github.com/EdgeVerve/oe-workflow-modeler.git"
   },
   "keywords": [
     "oecloud, oe-workflow"
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "bpmn-js": "^0.15.0",
-    "oe-workflow-properties-panel": "git+http://evgit/oecloud.io/oe-workflow-properties-panel.git#master",
-    "oe-camunda-bpmn-moddle": "git+http://evgit/oecloud.io/oe-camunda-bpmn-moddle.git#master",
+    "oe-workflow-properties-panel": "git+https://github.com/EdgeVerve/oe-workflow-properties-panel.git#master",
+    "oe-camunda-bpmn-moddle": "git+https://github.com/EdgeVerve/oe-camunda-bpmn-moddle.git#master",
     "diagram-js": "^0.15.0",
     "jquery": "^2.1.1",
     "lodash": "^3.0.0"
