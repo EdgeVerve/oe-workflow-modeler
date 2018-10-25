@@ -114,7 +114,7 @@ function openDecision(e) {
 	var elementRegistry =  bpmnModeler.get('elementRegistry');
 	var bpmnElement = elementRegistry.get(id);
 	var bpmnObj = bpmnElement.businessObject;
-	window.parent.postMessage(bpmnObj.decisionRef,"*");
+	window.parent.postMessage(bpmnObj.decisionRef,window.origin);
 }
 
 function openCallActivity(e) {

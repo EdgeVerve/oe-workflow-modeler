@@ -1,3 +1,10 @@
+/**
+ *
+ * ©2017-2018 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+ * Bangalore, India. All Rights Reserved.
+ *
+ */
+
 'use strict';
 
 module.exports = function (grunt) {
