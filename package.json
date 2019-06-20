@@ -1,6 +1,6 @@
 {
   "name": "oe-workflow-modeler",
-  "version": "0.0.0",
+  "version": "1.8.0",
   "description": "A oeCloud compatible bpmn-js modeler",
   "main": "app/index.js",
   "repository": {
