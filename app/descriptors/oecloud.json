@@ -1,0 +1,191 @@
+{
+  "name": "oecloud",
+  "prefix": "oecloud",
+  "uri": "http://oecloud",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "associations": [],
+  "types": [
+    {
+      "name": "General",
+      "superClass": [
+        "Element"
+      ],
+      "properties": [
+        {
+          "name": "disableEdit",
+          "isAttr": true,
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "SetPVScript",
+      "extends": ["bpmn:ScriptTask"],
+      "properties": [
+        {
+          "name": "isUpdateVariablesType",
+          "isAttr": true,
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "Assignable",
+      "extends": [ "bpmn:UserTask" ],
+      "properties": [
+        {
+          "name": "candidateRoles",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "excludedUsers",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "excludedGroups",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "excludedRoles",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "taskCategory",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "creationHook",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+            "name": "completionHook",
+            "isAttr": true,
+            "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "RestConnector",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "camunda:ServiceTaskLike"
+        ]
+      },
+      "properties": [
+        {
+          "name":"ctype",
+          "type":"String"
+        },
+        {
+          "name": "url",
+          "type": "String"
+        },
+        {
+          "name": "method",
+          "type": "String"
+        },
+        {
+          "name": "data",
+          "type": "String"
+        },
+        {
+          "name": "headers",
+          "type": "String"
+        },
+        {
+          "name": "message",
+          "type": "String"
+        },
+        {
+          "name": "retries",
+          "type": "String"
+        },
+        {
+          "name": "timeout",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "OeConnector",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "camunda:ServiceTaskLike"
+        ]
+      },
+      "properties": [
+        {
+          "name": "connectorId",
+          "type": "String"
+        },
+        {
+          "name": "model",
+          "type": "String"
+        },
+        {
+          "name": "method",
+          "type": "String"
+        },
+        {
+          "name": "args",
+          "type": "String"
+        },
+        {
+          "name": "data",
+          "type": "String"
+        },
+        {
+          "name": "modelId",
+          "type": "String"
+        },
+        {
+          "name": "modelData",
+          "type": "String"
+        },
+        {
+          "name": "modelVersion",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "FinalizeTransactionConnector",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "camunda:ServiceTaskLike"
+        ]
+      },
+      "properties": [
+        {
+          "name": "connectorId",
+          "type": "String"
+        },
+        {
+          "name": "FTType",
+          "type": "String"
+        },
+        {
+          "name": "FTValue",
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}
