@@ -10,7 +10,8 @@ const initialState = {
   flows: [],
   rules: [],
   files: [],
-  extensions: []
+  extensions: [],
+  version: 'v2'
 };
 
 
@@ -58,6 +59,10 @@ function modelerApp(state = initialState, action) {
     case Actions.RECEIVE_RULES_SUCCESS:
       return Object.assign({}, state, {
         rules: action.data
+      });
+    case Actions.CHANGE_VERSION:
+      return Object.assign({}, state, {
+        version: action.version
       });
     default:
       return state;
