@@ -134,7 +134,7 @@ function ConfigureButtons(bpmnModeler) {
     for (var i = 0; i < array.length; i++) {
       newHTML.push('<a class="dropdown-item">' + array[i].fullPath + '</a>');
     }
-    newHTML.push('<div class="dropdown-divider"></div>');
+    // newHTML.push('<div class="dropdown-divider"></div>');
     $(".list").html(newHTML.join(""));
     $(".dropdown1-menu .list a").click(function () {
       var fileName = $(this).text();
@@ -148,7 +148,7 @@ function ConfigureButtons(bpmnModeler) {
   Subscribe(['extensions'], function (newState) {
     bpmnModeler.get('palette')._update();
   });
-
+ 
   $('#js-file-name').keypress(function (evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
@@ -210,48 +210,27 @@ function ConfigureButtons(bpmnModeler) {
   } else {
     registerFileDrop(container, openDiagram);
   }
-  // $(document).ready(function(){ 
-  //   let state = ReduxStore.getState();
-  //   let array = state.files;
-  //   let newHTML = [];
-  //   for (var i = 0; i < array.length; i++) {
-  //       newHTML.push('<a class="dropdown-item">' + array[i].name + '</a>');
-  //   }
-  //   newHTML.push('<div class="dropdown-divider"></div>');
-  //   $(".list").html(newHTML.join(""));
-  // });
+  
   $('.js-create-diagram').click(function (e) {
     openDiagram('newDiagram.bpmn', null, diagramXML);
   });
 
   $('#js-menu').click(function (e) {
+    e.stopPropagation();
     $('.menu-items').toggleClass('hidden');
   });
 
   $('#props-toggle').click(function (e) {
-    if ($(this).is('.closed')) {
-      $(this).removeClass('closed');
-      $('#js-properties-panel').removeClass('closed');
-      $('.buttons').removeClass('move');
-      $('.menu-items').removeClass('move-items');
-      $('#props-toggle').removeClass('move-toggle');
-    } else {
-      $(this).addClass('closed');
-      $('#js-properties-panel').addClass('closed');
-      $('.buttons').addClass('move');
-      $('.menu-items').addClass('move-items');
-      $('#props-toggle').addClass('move-toggle');
-    }
+    $('#props-toggle').toggleClass('closed');
+    $('#js-properties-panel').toggleClass('closed');
+    $('.buttons').toggleClass('move');
+    $('.menu-items').toggleClass('move-items');
+    $('#props-toggle').toggleClass('move-toggle');
   });
-
+ 
   $('#open-local-file').click(function (e) {
-    if ($('#file-list').is('.hidden')) {
-      $('#file-list').removeClass('hidden');
-    }
-    else
-    {
-      $('#file-list').addClass('hidden');
-    }
+    e.stopPropagation();
+    $('#file-list').toggleClass('hidden');
   });
 
   $('#upload-file').click(function (e) {
@@ -264,7 +243,10 @@ function ConfigureButtons(bpmnModeler) {
       readFileText(file, openDiagram);
     }
   });
-
+  // $(document).click(function(e){
+  //   $('#file-list').addClass('hidden');
+  //   $('.menu-items').addClass('hidden');
+  // });
 
   function downloadFile(filename, data) {
     let link = document.createElement('a');
@@ -312,7 +294,7 @@ function ConfigureButtons(bpmnModeler) {
       communicator.saveDiagramContent(getFilename('bpmn').fullName, data);
     });
   });
-
+ 
   // $('#js-file-node').click(function (evt) {
   //   let fileName = evt.currentTarget.dataset.file;
   //   if (fileName) {
