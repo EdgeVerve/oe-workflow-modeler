@@ -77,3 +77,11 @@ export function extensionsReceivedAction(data) {
     data: data
   };
 }
+
+export const CHANGE_VERSION = 'CHANGE_VERSION';
+export function changeVersionAction(version) {
+  return {
+    type: CHANGE_VERSION,
+    version
+  };
+}

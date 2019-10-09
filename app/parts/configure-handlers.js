@@ -16,13 +16,14 @@ import {
   receiveModelsSuccessAction,
   extensionsReceivedAction,
   setPrimaryFolderAction,
-  setFilesAction
+  setFilesAction,
+  changeVersionAction
 } from '../state/actions';
 
 import Communicator from './communicator';
 
 import {
-  saveAsOld,
+  convertToOld,
   loadAsNew
 } from './xml-parser';
 
@@ -158,7 +159,17 @@ function ConfigureButtons(bpmnModeler) {
   });
 
   function openDiagram(fileName, filePath, xml) {
+    let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
+    if(xml.includes('oecloud:')){
+      version = 'v2'
+    } else {
+      version = 'v1'
+    }
+    $('select option').removeAttr('selected').filter('[value='+version+']').attr('selected',true);
+    ReduxStore.dispatch(changeVersionAction(version));
+    /* Always convert to New for editing */
+    xml = loadAsNew (xml);
     bpmnModeler.importXML(xml, function (err) {
       if (err) {
         ReduxStore.dispatch(diagramLoadedAction(fileName, filePath, err.message));
@@ -275,14 +286,17 @@ function ConfigureButtons(bpmnModeler) {
   });
 
   $("select.custom-select").change(function(){
-      var selectedVersion = $(this).children("option:selected").val();
-      alert("You have selected the version " + selectedVersion);
+      var selectedVersion = $(this)[0].value;
+      ReduxStore.dispatch(changeVersionAction(selectedVersion));
   });
 
   $('#js-download-diagram').click(function () {
     bpmnModeler.saveXML({
       format: true
     }, function (err, data) {
+      if(ReduxStore.getState().version === 'v1'){
+        data = convertToOld(data);
+      }
       downloadFile(getFilename('bpmn').name, data);
     });
   });
@@ -291,6 +305,9 @@ function ConfigureButtons(bpmnModeler) {
     bpmnModeler.saveXML({
       format: true
     }, function (err, data) {
+      if(ReduxStore.getState().version === 'v1'){
+        data = convertToOld(data);
+      }
       communicator.saveDiagramContent(getFilename('bpmn').fullName, data);
     });
   });
