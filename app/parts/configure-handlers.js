@@ -31,6 +31,14 @@ function ConfigureButtons(bpmnModeler) {
 
 
   var communicator = new Communicator();
+
+  window.addEventListener('open-diagram', function(evt){
+    let fileName = evt.detail;
+    if(!fileName.endsWith('.bpmn')){
+      fileName = `${fileName}.bpmn`;
+    }
+    communicator.getFileContent(fileName);
+  });
   communicator.onDiagramContent(function (data) {
     openDiagram(path.basename(data.path), data.path, new TextDecoder('utf-8').decode(Buffer.from(data.fileContents)));
   });
