@@ -133,23 +133,23 @@ function ConfigureButtons(bpmnModeler) {
     var array = newState.files;
     var newHTML = [];
     for (var i = 0; i < array.length; i++) {
-      newHTML.push('<a class="dropdown-item">' + array[i].fullPath + '</a>');
+      newHTML.push('<a class="dropdown-item" tabindex="0">' + array[i].fullPath + '</a>');
     }
     // newHTML.push('<div class="dropdown-divider"></div>');
     $(".list").html(newHTML.join(""));
     $(".dropdown1-menu .list a").click(function () {
       var fileName = $(this).text();
       if (fileName) {
-          communicator.getFileContent(fileName);
-          $('#file-list').addClass('hidden');
-        }
+        communicator.getFileContent(fileName);
+        $('#file-list').addClass('hidden');
+      }
     });
   });
 
   Subscribe(['extensions'], function (newState) {
     bpmnModeler.get('palette')._update();
   });
- 
+  
   $('#js-file-name').keypress(function (evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
@@ -161,15 +161,15 @@ function ConfigureButtons(bpmnModeler) {
   function openDiagram(fileName, filePath, xml) {
     let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
-    if(xml.includes('oecloud:')){
+    if (xml.includes('oecloud:')) {
       version = 'v2'
     } else {
       version = 'v1'
     }
-    $('select option').removeAttr('selected').filter('[value='+version+']').attr('selected',true);
+    $('select option').removeAttr('selected').filter('[value=' + version + ']').attr('selected', true);
     ReduxStore.dispatch(changeVersionAction(version));
     /* Always convert to New for editing */
-    xml = loadAsNew (xml);
+    xml = loadAsNew(xml);
     bpmnModeler.importXML(xml, function (err) {
       if (err) {
         ReduxStore.dispatch(diagramLoadedAction(fileName, filePath, err.message));
@@ -221,11 +221,11 @@ function ConfigureButtons(bpmnModeler) {
   } else {
     registerFileDrop(container, openDiagram);
   }
-  
+
   $('.js-create-diagram').click(function (e) {
     openDiagram('newDiagram.bpmn', null, diagramXML);
   });
-
+  
   $('#js-menu').click(function (e) {
     e.stopPropagation();
     $('.menu-items').toggleClass('hidden');
@@ -238,7 +238,7 @@ function ConfigureButtons(bpmnModeler) {
     $('.menu-items').toggleClass('move-items');
     $('#props-toggle').toggleClass('move-toggle');
   });
- 
+
   $('#open-local-file').click(function (e) {
     e.stopPropagation();
     $('#file-list').toggleClass('hidden');
@@ -254,10 +254,6 @@ function ConfigureButtons(bpmnModeler) {
       readFileText(file, openDiagram);
     }
   });
-  // $(document).click(function(e){
-  //   $('#file-list').addClass('hidden');
-  //   $('.menu-items').addClass('hidden');
-  // });
 
   function downloadFile(filename, data) {
     let link = document.createElement('a');
@@ -285,16 +281,16 @@ function ConfigureButtons(bpmnModeler) {
     });
   });
 
-  $("select.custom-select").change(function(){
-      var selectedVersion = $(this)[0].value;
-      ReduxStore.dispatch(changeVersionAction(selectedVersion));
+  $("select.custom-select").change(function () {
+    var selectedVersion = $(this)[0].value;
+    ReduxStore.dispatch(changeVersionAction(selectedVersion));
   });
 
   $('#js-download-diagram').click(function () {
     bpmnModeler.saveXML({
       format: true
     }, function (err, data) {
-      if(ReduxStore.getState().version === 'v1'){
+      if (ReduxStore.getState().version === 'v1') {
         data = convertToOld(data);
       }
       downloadFile(getFilename('bpmn').name, data);
@@ -305,13 +301,13 @@ function ConfigureButtons(bpmnModeler) {
     bpmnModeler.saveXML({
       format: true
     }, function (err, data) {
-      if(ReduxStore.getState().version === 'v1'){
+      if (ReduxStore.getState().version === 'v1') {
         data = convertToOld(data);
       }
       communicator.saveDiagramContent(getFilename('bpmn').fullName, data);
     });
   });
- 
+
   // $('#js-file-node').click(function (evt) {
   //   let fileName = evt.currentTarget.dataset.file;
   //   if (fileName) {
