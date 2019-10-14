@@ -49,7 +49,7 @@ function configureRoutes(app, options) {
 
   router.get('/files/:filename', function getWfModel(req, res, next) {
     var fileName = req.params.filename;
-    app.models.bpmndata.find({ where: { bpmnname: fileName }, fields: ['bpmnname', 'xmldata', 'versionmessage'] }, options,
+    app.models.bpmndata.find({ where: { bpmnname: fileName }, fields: ['xmldata', 'versionmessage'] }, options,
       function fetchBpmn(err, bpmndata) {
         if (err) {
           next(err);
