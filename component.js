@@ -48,13 +48,14 @@ function configureRoutes(app, options) {
   });
 
   router.get('/files/:filename', function getWfModel(req, res, next) {
-    var fileName = req.params.fileName;
-    app.models.bpmndata.findOne({ where: { bpmnname: fileName }, fields: ['xmldata'] }, options,
+    var fileName = req.params.filename;
+    app.models.bpmndata.find({ where: { bpmnname: fileName }, fields: ['bpmnname', 'xmldata', 'versionmessage'] }, options,
       function fetchBpmn(err, bpmndata) {
         if (err) {
           next(err);
-        } else if (bpmndata) {
-          res.send(bpmndata.xmldata);
+        } else if (bpmndata.length) {
+          bpmndata.sort((a, b) => (a.versionmessage < b.versionmessage) ? 1 : -1);
+          res.send(bpmndata[0].xmldata);
         } else {
           res.send({ status: 404 });
         }
