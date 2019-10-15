@@ -57,6 +57,18 @@ function configureRoutes(app, options) {
       });
   });
 
+  router.get('/models', function getModels(req, res, next){
+    let response = {};
+
+    Object.keys(app.models).forEach(m => {
+      // if(m === 'Task')
+      // console.log(typeof app.models[m], Object.keys(app.models[m]));      
+      response[m] = {};
+    });
+
+    res.send(response);
+  });
+
   router.get('/files/:filename', function getWfModel(req, res, next) {
     var fileName = req.params.filename;
     app.models.bpmndata.find({
