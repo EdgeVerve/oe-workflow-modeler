@@ -5,9 +5,16 @@ const MODELER_UI_ROOT = path.join(__dirname, 'dist');
 function configureRoutes(app, options) {
   const loopback = app.loopback;
   const router = new loopback.Router();
+  router.use(bodyParser.urlencoded({
+    extended: false
+  }));
+  router.use(bodyParser.text());
 
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.text());
+  function getCallContext(req) {
+    return req.callContext || options.callContext || {
+      ignoreAutoScope: true
+    };
+  }
 
   if (options.extensionsPath) {
     router.get('/extensions', function getExtensions(req, res, next) {
@@ -28,28 +35,36 @@ function configureRoutes(app, options) {
       },
       fields: ['name']
     };
-    app.models.WorkflowDefinition.find(filter, options,
+
+    app.models.WorkflowDefinition.find(filter, getCallContext(req),
       function fetchWD(err, wfDefns) {
         if (err) {
-          next(err);
+          return next(err);
         }
         res.send(wfDefns.map(item => item.name));
       });
   });
 
   router.get('/rules', function getRules(req, res, next) {
-    app.models.DecisionTable.find(options,
+    app.models.DecisionTable.find({
+        fields: ['name']
+      }, getCallContext(req),
       function fetchDecisionTable(err, decisionTable) {
         if (err) {
-          next(err);
+          return next(err);
         }
-        res.send(decisionTable);
+        res.send(decisionTable.map(item => item.name));
       });
   });
 
   router.get('/files/:filename', function getWfModel(req, res, next) {
     var fileName = req.params.filename;
-    app.models.bpmndata.find({ where: { bpmnname: fileName }, fields: ['xmldata', 'versionmessage'] }, options,
+    app.models.bpmndata.find({
+        where: {
+          bpmnname: fileName
+        },
+        fields: ['xmldata', 'versionmessage']
+      }, getCallContext(req),
       function fetchBpmn(err, bpmndata) {
         if (err) {
           next(err);
@@ -57,14 +72,21 @@ function configureRoutes(app, options) {
           bpmndata.sort((a, b) => (a.versionmessage < b.versionmessage) ? 1 : -1);
           res.send(bpmndata[0].xmldata);
         } else {
-          res.send({ status: 404 });
+          res.send({
+            status: 404
+          });
         }
       });
   });
   router.post('/files/:filename', function postWfModel(req, res, next) {
     var fileName = req.params.filename;
     var xmlData = req.body;
-    app.models.bpmndata.find({ where: { bpmnname: fileName }, fields: ['bpmnname', 'versionmessage'] }, options,
+    app.models.bpmndata.find({
+        where: {
+          bpmnname: fileName
+        },
+        fields: ['bpmnname', 'versionmessage']
+      }, getCallContext(req),
       function findBpmn(err, bpmndata) {
         var bpmnData = {};
         if (err) {
@@ -74,17 +96,20 @@ function configureRoutes(app, options) {
           bpmndata.forEach(bpmndata => {
             version.push(parseFloat(bpmndata.versionmessage) * 10);
           });
-          version.sort(function sortVersion(a, b) { return b - a; });
+          version.sort((a, b) => (b - a));
           bpmnData.bpmnname = fileName;
           var newVersion = (version[0] + 1) / 10;
           bpmnData.versionmessage = newVersion;
           bpmnData.xmldata = xmlData;
-          app.models.bpmndata.upsert(bpmnData,
+          app.models.bpmndata.upsert(bpmnData, getCallContext(req),
             function updateBpmn(err, bpmn) {
               if (err) {
                 next(err);
               } else if (bpmn) {
-                app.models.WorkflowDefinition.create({ name: bpmnData.bpmnname, xmldata: bpmnData.xmldata },
+                app.models.WorkflowDefinition.create({
+                    name: bpmnData.bpmnname,
+                    xmldata: bpmnData.xmldata
+                  }, getCallContext(req),
                   function createWf(err, wfModel) {
                     if (err) {
                       next(err);
@@ -97,12 +122,15 @@ function configureRoutes(app, options) {
           bpmnData.versionmessage = '1.0';
           bpmnData.xmldata = xmlData;
           bpmnData.bpmnname = fileName;
-          app.models.bpmndata.create(bpmnData,
+          app.models.bpmndata.create(bpmnData, getCallContext(req),
             function insertBpmn(err, bpmn) {
               if (err) {
                 next(err);
               } else if (bpmn) {
-                app.models.WorkflowDefinition.create({ name: bpmnData.bpmnname, xmldata: bpmnData.xmldata },
+                app.models.WorkflowDefinition.create({
+                    name: bpmnData.bpmnname,
+                    xmldata: bpmnData.xmldata
+                  }, getCallContext(req),
                   function createWf(err, wfModel) {
                     if (err) {
                       next(err);
