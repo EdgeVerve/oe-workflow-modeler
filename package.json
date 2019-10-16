@@ -1,6 +1,6 @@
 {
   "name": "oe-workflow-modeler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "oeCloud Workflow Modeler",
   "main": "app/index.js",
   "scripts": {
