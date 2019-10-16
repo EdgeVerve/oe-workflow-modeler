@@ -85,7 +85,7 @@ function configureRoutes(app, options) {
             }
           }
         }
-        response[m] = { ...func };
+        response[m] = func;
       });
     });
     res.send(response);
