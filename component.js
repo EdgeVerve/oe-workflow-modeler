@@ -63,9 +63,6 @@ function configureRoutes(app, options) {
   function getParamNames(func) {
     var fnStr = func.toString().replace(STRIP_COMMENTS, '');
     var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-    if (result === null) {
-      result = null;
-    }
     return result;
   }
 
