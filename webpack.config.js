@@ -7,6 +7,7 @@ const APP_DIR = path.resolve(__dirname, './app');
 const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 const devData = require('./resources/sample-responses');
 const fs = require('fs');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -47,6 +48,9 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      PathObserver: ['observe-js', 'PathObserver']
+    }),
     new MonacoWebpackPlugin({
       languages: ['javascript', 'typescript', 'json']
     }),

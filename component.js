@@ -105,9 +105,7 @@ function configureRoutes(app, options) {
         bpmndata.sort((a, b) => (a.versionmessage < b.versionmessage) ? 1 : -1);
         res.send(bpmndata[0].xmldata);
       } else {
-        res.send({
-          status: 404
-        });
+        res.status(404).send('Not found');
       }
     });
   });

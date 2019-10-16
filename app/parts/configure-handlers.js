@@ -32,12 +32,26 @@ function ConfigureButtons(bpmnModeler) {
 
   var communicator = new Communicator();
 
+  function fetchDiagramData(fileName){
+    
+    let state = ReduxStore.getState();
+    if(state.hasChanged){
+      window.dispatchEvent(new CustomEvent('oe-show-confirm', {detail: {
+        message: `Changes to ${state.fileName} will be lost. Continue?`,
+        ok: function(){
+          communicator.getFileContent(fileName);
+        }
+      }}))
+    } else {
+      communicator.getFileContent(fileName);
+    }
+  }
   window.addEventListener('open-diagram', function(evt){
     let fileName = evt.detail;
     if(!fileName.endsWith('.bpmn')){
       fileName = `${fileName}.bpmn`;
     }
-    communicator.getFileContent(fileName);
+    fetchDiagramData(fileName);
   });
   communicator.onDiagramContent(function (data) {
     openDiagram(path.basename(data.path), data.path, new TextDecoder('utf-8').decode(Buffer.from(data.fileContents)));
@@ -45,8 +59,12 @@ function ConfigureButtons(bpmnModeler) {
 
   communicator.onSaveSuccess(function (data) {
     ReduxStore.dispatch(diagramSavedAction());
+    window.dispatchEvent(new CustomEvent('oe-show-success', {detail: data}));
   });
 
+  communicator.onError(function(message){
+    window.dispatchEvent(new CustomEvent('oe-show-error', {detail: message}));
+  });
   communicator.onModels(function (data) {
     ReduxStore.dispatch(receiveModelsSuccessAction(data));
   });
@@ -148,9 +166,9 @@ function ConfigureButtons(bpmnModeler) {
     $(".dropdown1-menu .list a").click(function () {
       var fileName = $(this).text();
       if (fileName) {
-          communicator.getFileContent(fileName);
-          $('#file-list').addClass('hidden');
-        }
+        fetchDiagramData(fileName);
+        $('#file-list').addClass('hidden');
+      }
     });
   });
 
@@ -337,13 +355,6 @@ function ConfigureButtons(bpmnModeler) {
       communicator.saveDiagramContent(getFilename('bpmn').fullName, data);
     });
   });
-
-  // $('#js-file-node').click(function (evt) {
-  //   let fileName = evt.currentTarget.dataset.file;
-  //   if (fileName) {
-  //     communicator.getFileContent(fileName);
-  //   }
-  // });
 }
 
 export {

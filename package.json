@@ -49,6 +49,7 @@
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
+    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#master",
     "@material/fab": "^3.1.0",
     "bpmn-js": "^5.0.3",
     "bpmn-js-properties-panel": "^0.32.0",
