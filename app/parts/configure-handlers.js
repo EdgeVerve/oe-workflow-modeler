@@ -59,6 +59,13 @@ function ConfigureButtons(bpmnModeler) {
 
   communicator.onSaveSuccess(function (data) {
     ReduxStore.dispatch(diagramSavedAction());
+    if(typeof data === 'object' && data.name){
+      if(data.versionmessage){
+        data = `Saved successfully [${data.name}/${data.versionmessage}]`
+      } else {
+        data = `Saved successfully [${data.name}]`
+      }
+    }
     window.dispatchEvent(new CustomEvent('oe-show-success', {detail: data}));
   });
 

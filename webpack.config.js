@@ -97,8 +97,8 @@ module.exports = {
         let fileName = req.params.name;
         fs.writeFile(`${__dirname}/resources/${fileName}`, req.body, (err) => {
           if (err) throw err;
-          res.contentType('application/text');
-          res.send('File Saved');
+          res.contentType('application/json');
+          res.json({name: fileName, message: 'File Saved'});
         });
       });
     }

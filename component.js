@@ -132,7 +132,7 @@ function configureRoutes(app, options) {
         app.models.bpmndata.upsert(bpmnData, getCallContext(req),
           function updateBpmn(err, bpmn) {
             if (err) {
-              next(err);
+              return next(err);
             } else if (bpmn) {
               app.models.WorkflowDefinition.create({
                 name: bpmnData.bpmnname,
@@ -140,9 +140,10 @@ function configureRoutes(app, options) {
               }, getCallContext(req),
               function createWf(err, wfModel) {
                 if (err) {
-                  next(err);
+                  return next(err);
                 }
-                res.send(wfModel);
+                wfModel.versionmessage = bpmnData.versionmessage;
+                res.json(wfModel);
               });
             }
           });

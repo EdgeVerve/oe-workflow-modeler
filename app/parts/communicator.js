@@ -81,7 +81,7 @@ export default class Communicator {
     });
 
     oReq.open("POST", url);
-    oReq.requestType = mime;
+    oReq.responseType = mime;
     oReq.send(body);
   }
 
@@ -220,7 +220,7 @@ export default class Communicator {
       });
     } else {
       var self = this;
-      self._xhrpost(`files/${fileName}`, fileContent, 'arraybuffer', function(err, data){
+      self._xhrpost(`files/${fileName}`, fileContent, function(err, data){
         if(err){
           self.handleError(`Unable to save ${fileName}: ${err.message||err}`);
         }
