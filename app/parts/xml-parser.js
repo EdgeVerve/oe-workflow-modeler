@@ -5,6 +5,8 @@ module.exports.convertToOld = function convertToOld(data) {
     } 
     data = data.replace(/oecloud:restConnector/g, 'camunda:connector');
     data = data.replace(/oecloud:/g, 'camunda:');
+    /* Remove camunda: from isUpdateVariablesType for old */
+    data = data.replace(/camunda:isUpdateVariablesType/g, 'isUpdateVariablesType');
     return data;
 }
 
