@@ -102,6 +102,9 @@ function ConfigureButtons(bpmnModeler) {
       $('#js-file-name').html(newState.fileName);
     }
     if (newState.errorMessage) {
+      document.dispatchEvent(new CustomEvent('error', {
+        detail: { message: "Invalid File, Upload a BPMN file" }
+      }));
       container
         .removeClass('with-diagram')
         .addClass('with-error');
@@ -111,15 +114,15 @@ function ConfigureButtons(bpmnModeler) {
     } else {
       $('.buttons').removeClass('hidden');
       $('#props-toggle').removeClass('hidden');
-      $('#oe-version').removeClass('hidden');
       $('#js-properties-panel').removeClass('closed');
-
+      $('#error').addClass('hidden');
       container
         .removeClass('with-error')
         .addClass('with-diagram');
     }
   });
-
+ 
+  document.addEventListener("error", errorMessageHandler);
   Subscribe(['fileName', 'hasChanged'], function (newState) {
     let element = $('#js-file-name');
     if (newState.hasChanged) {
@@ -135,9 +138,8 @@ function ConfigureButtons(bpmnModeler) {
     for (var i = 0; i < array.length; i++) {
       newHTML.push('<a class="dropdown-item" tabindex="0">' + array[i].fullPath + '</a>');
     }
-    // newHTML.push('<div class="dropdown-divider"></div>');
     $(".list").html(newHTML.join(""));
-    $(".dropdown1-menu .list a").click(function () {
+    $(".dropdown1-menu .list a").click(function (e) {
       var fileName = $(this).text();
       if (fileName) {
         communicator.getFileContent(fileName);
@@ -149,7 +151,14 @@ function ConfigureButtons(bpmnModeler) {
   Subscribe(['extensions'], function (newState) {
     bpmnModeler.get('palette')._update();
   });
-  
+  $("#srch-term").on("keyup", function(e) {
+    var value = $(this).val().toLowerCase();
+    var newHeight = $('.list').innerHeight();
+    $('.list').css('height',newHeight+'px');
+    $(".list a").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
   $('#js-file-name').keypress(function (evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
@@ -157,7 +166,9 @@ function ConfigureButtons(bpmnModeler) {
       ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
     }
   });
-
+  $('#errorClose').click(function (evt) {
+    $('#error').addClass('hidden');
+  });
   function openDiagram(fileName, filePath, xml) {
     let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
@@ -187,7 +198,13 @@ function ConfigureButtons(bpmnModeler) {
     };
     reader.readAsText(file);
   }
-
+  function errorMessageHandler(e) {
+    $('#error').removeClass('hidden');
+    $("#errorM").html(e.detail.message);
+    $('#props-toggle').addClass('hidden');
+    $('.buttons').addClass('hidden');
+    $('#js-properties-panel').addClass('closed');
+  }
   function registerFileDrop(container, callback) {
 
     function handleFileSelect(e) {
@@ -225,7 +242,7 @@ function ConfigureButtons(bpmnModeler) {
   $('.js-create-diagram').click(function (e) {
     openDiagram('newDiagram.bpmn', null, diagramXML);
   });
-  
+
   $('#js-menu').click(function (e) {
     e.stopPropagation();
     $('.menu-items').toggleClass('hidden');
@@ -245,6 +262,7 @@ function ConfigureButtons(bpmnModeler) {
   });
 
   $('#upload-file').click(function (e) {
+    $('#file-list').toggleClass('hidden');
     $('#file-input').click();
   });
 
