@@ -81,7 +81,7 @@ export default class Communicator {
     });
 
     oReq.open("POST", url);
-    oReq.requestType = mime;
+    oReq.responseType = mime;
     oReq.send(body);
   }
 
@@ -123,6 +123,9 @@ export default class Communicator {
     } else {
       var self = this;
       self._xhrget('rules', function(err, data){
+        if(err){
+          self.handleError(`Error Loading rules: ${err.message||err}`);
+        }
         if(!err && self._onRuleFiles){
           self._onRuleFiles(data);
         }
@@ -156,6 +159,9 @@ export default class Communicator {
     } else {
       var self = this;
       self._xhrget('models', function(err, data){
+        if(err){
+          self.handleError(`Error Loading models: ${err.message||err}`);
+        }
         if(!err && self._onModels){
           self._onModels(data);
         }
@@ -172,6 +178,9 @@ export default class Communicator {
     } else {
       var self = this;
       self._xhrget('extensions', function(err, data){
+        if(err){
+          self.handleError(`Error Loading extensions: ${err.message||err}`);
+        }
         if(!err && self._onExtensions){
           self._onExtensions(data);
         }
@@ -190,6 +199,9 @@ export default class Communicator {
     } else {
       var self = this;
       self._xhrget(`files/${fileName}`, 'arraybuffer', function(err, data){
+        if(err){
+          self.handleError(`Unable to load ${fileName}: ${err.message||err}`);
+        }
         if(!err && self._onDiagramContent){
           self._onDiagramContent({path: fileName, fileContents: data});
         }
@@ -208,7 +220,10 @@ export default class Communicator {
       });
     } else {
       var self = this;
-      self._xhrpost(`files/${fileName}`, fileContent, 'arraybuffer', function(err, data){
+      self._xhrpost(`files/${fileName}`, fileContent, function(err, data){
+        if(err){
+          self.handleError(`Unable to save ${fileName}: ${err.message||err}`);
+        }
         if(!err && self._onSaveSuccess){
           self._onSaveSuccess(data);
         }
@@ -217,5 +232,16 @@ export default class Communicator {
   }
   onSaveSuccess(callback) {
     this._onSaveSuccess = callback;
+  }
+
+  handleError(message){
+    if(this._onError){
+      this._onError(message);
+    } else {
+      console.error(message);
+    }
+  }
+  onError(callback) {
+    this._onError = callback;
   }
 }

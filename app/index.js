@@ -9,6 +9,9 @@ import {
   ConfigureScriptEditor
 } from './parts/load-editor';
 
+
+import 'oe-message-handler/oe-message-handler.js'
+
 import '../styles/app.less';
 
 $(function () {

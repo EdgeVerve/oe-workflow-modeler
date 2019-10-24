@@ -19,33 +19,23 @@ export default class CustomContextPad {
       translate
     } = this;
 
-    function appendServiceTask(event, element) {
-      if (autoPlace) {
-        const shape = elementFactory.createShape({ type: 'bpmn:ServiceTask' });
-  
-        autoPlace.append(element, shape);
-      } else {
-        appendServiceTaskStart(event, element);
-      }
+    let entries = {};
+    function openCalledActivity(event, element) {
+      window.dispatchEvent(new CustomEvent('open-diagram', {detail: element.businessObject.calledElement}));
     }
 
-    function appendServiceTaskStart(event) {
-      const shape = elementFactory.createShape({ type: 'bpmn:ServiceTask' });
-  
-      create.start(event, shape, element);
+    if(element.type === 'bpmn:CallActivity' && element.businessObject && element.businessObject.calledElement){
+      entries['drilldown.call-activity'] = {
+        group: 'model',
+        className: 'bpmn-icon-data-output',
+        title: translate('Open Call Activity Flow'),
+        action: {
+          click: openCalledActivity
+        }
+      };
     }
 
-    return {
-      // 'append.service-task': {
-      //   group: 'model',
-      //   className: 'bpmn-icon-service-task',
-      //   title: translate('Append ServiceTask'),
-      //   action: {
-      //     click: appendServiceTask,
-      //     dragstart: appendServiceTaskStart
-      //   }
-      // }
-    };
+    return entries;
   }
 }
 
