@@ -60,6 +60,10 @@ module.exports = {
         to: 'vendor'
       },
       {
+        from: './node_modules/bootstrap/dist/css/bootstrap.min.css',
+        to: 'vendor/bootstrap/css'
+      },
+      {
         from: 'app',
         ignore: ['**/*.js', 'app.css'],
         to: ''
