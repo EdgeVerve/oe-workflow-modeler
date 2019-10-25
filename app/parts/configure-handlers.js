@@ -186,8 +186,6 @@ function ConfigureButtons(bpmnModeler) {
   });
   $("#srch-term").on("keyup", function(e) {
     var value = $(this).val().toLowerCase();
-    var newHeight = $('.list').innerHeight();
-    $('.list').css('height',newHeight+'px');
     $(".list a").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
