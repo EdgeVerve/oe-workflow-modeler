@@ -61,7 +61,6 @@ function createFTConnectorGroup(element, bpmnFactory, elementRegistry) {
       var bo = ImplementationTypeHelper.getServiceTaskLikeBusinessObject(element);
       return bo && ImplementationTypeHelper.getImplementationType(bo) === 'FinalizeTransactionConnector';
     }
-
   };
   FTConnectorDetailProps(FTConnectorDetailsGroup, element, bpmnFactory);
   return FTConnectorDetailsGroup;

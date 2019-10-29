@@ -21,7 +21,9 @@ const domQuery = require('min-dom').query;
 const domClear = require('min-dom').clear;
 const domify = require('min-dom').domify;
 
-import {ReduxStore} from '../../../state/store';
+import {
+  ReduxStore
+} from '../../../state/store';
 
 function getImplementationType(element) {
   return ImplementationTypeHelper.getImplementationType(element);
@@ -47,7 +49,7 @@ var METHOD_OPTIONS = [];
 var CUSTOM_MODEL_NAME = 'Custom Model';
 var CUSTOM_METHOD_NAME = 'Custom Method';
 
-function getModelOptions(modelData){
+function getModelOptions(modelData) {
   return [{
     name: '',
     value: ''
@@ -56,11 +58,17 @@ function getModelOptions(modelData){
       name: m,
       value: m
     }
-  })).concat({name:CUSTOM_MODEL_NAME, value: CUSTOM_MODEL_NAME});
+  })).concat({
+    name: CUSTOM_MODEL_NAME,
+    value: CUSTOM_MODEL_NAME
+  });
 }
 
-function getMethodOptions(model, modelData){
-  let METHOD_OPTIONS = [{name:'', value:''}];
+function getMethodOptions(model, modelData) {
+  let METHOD_OPTIONS = [{
+    name: '',
+    value: ''
+  }];
   if (model && modelData[model]) {
     METHOD_OPTIONS = METHOD_OPTIONS.concat(Object.keys(modelData[model]).map(m => {
       return {
@@ -69,164 +77,181 @@ function getMethodOptions(model, modelData){
       }
     }));
   }
-  return METHOD_OPTIONS.concat({name:CUSTOM_METHOD_NAME, value: CUSTOM_METHOD_NAME});
+  return METHOD_OPTIONS.concat({
+    name: CUSTOM_METHOD_NAME,
+    value: CUSTOM_METHOD_NAME
+  });
 }
 
 function OEConnectorDetailProps(group, element, bpmnFactory) {
 
   //var ctype = ImplementationTypeHelper.getImplementationType(element);
   //if (ctype === 'OeConnector') {
-    var bo = ImplementationTypeHelper.getServiceTaskLikeBusinessObject(element);
-    var modelValue = bo.$attrs.modelValue;
-    let modelData = ReduxStore.getState().models;
+  var bo = ImplementationTypeHelper.getServiceTaskLikeBusinessObject(element);
+  var modelValue = bo.$attrs.modelValue;
+  let modelData = ReduxStore.getState().models;
 
-    group.entries.push(EntryFactory.selectBox({
-      id: 'modelValue',
-      label: 'Select Model',
-      modelProperty: 'modelValue',
-      selectOptions: getModelOptions(modelData),
+  group.entries.push(EntryFactory.selectBox({
+    id: 'modelValue',
+    label: 'Select Model',
+    modelProperty: 'modelValue',
+    selectOptions: getModelOptions(modelData),
 
-      get: function (element, node) {
-        var bo = getBusinessObject(element);
-        var connector = bo && getConnector(bo);
-        var value = bo.get('modelValue');
-        if(!value && connector && connector.get('model')) value = connector.get('model');
-        if(value && !modelData.hasOwnProperty(value)) value = CUSTOM_MODEL_NAME;
-        bo.$attrs.modelValue = value; 
-        if(value !== CUSTOM_MODEL_NAME) connector.set('model', value);
-        return {
-          modelValue: value
-        };
-      },
-
-      set: function (element, values, node) {
-        var res = {};
-        if (values.modelValue !== '') {
-          res.modelValue = values.modelValue;
-        } else {
-          res.modelValue = undefined;
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      var value = bo && bo.get('modelValue');
+      var connector = bo && getConnector(bo);
+      if (connector && connector.get('model')) {
+        if (!value) {
+          value = connector.get('model');
         }
-        return CmdHelper.updateProperties(element, res);
-      },
-    }));
-
-    group.entries.push(EntryFactory.textField({
-      id: 'connectorModel',
-      label: 'Model',
-      modelProperty: 'model',
-
-      get: function (element, node) {
-        var bo = getBusinessObject(element);
-        var connector = bo && getConnector(bo);
-        var value = connector && connector.get('model');
-        return {
-          model: value
-        };
-      },
-
-      set: function (element, values, node) {
-        var bo = getBusinessObject(element);
-        var connector = getConnector(bo);
-        return CmdHelper.updateBusinessObject(element, connector, {
-          model: values.model || undefined
-        });
-      },
-
-      hidden: function (element) {
-        return element.businessObject.$attrs.modelValue !== CUSTOM_MODEL_NAME
-      }
-    }));
-
-
-    group.entries.push(EntryFactory.selectBox({
-      id: 'methodValue',
-      label: 'Select Method',
-      selectOptions: getMethodOptions(modelValue, modelData),
-      modelProperty: 'methodValue',
-
-      get: function (element, node) {
-        var bo = getBusinessObject(element);
-        var connector = bo && getConnector(bo);
-        var modelValue = bo.get('modelValue');
-        var value = bo.get('methodValue');
-        var selectBox = domQuery('select[name=methodValue]', node);
-        domClear(selectBox);
-        var METHOD_OPTIONS = getMethodOptions(modelValue, modelData);
-        METHOD_OPTIONS.forEach(function (option) {
-          var optionEntry = domify('<option value="' + escapeHTML(option.value) + '">' + escapeHTML(option.name) + '</option>');
-          selectBox.appendChild(optionEntry);
-        });
-
-        if(modelValue === CUSTOM_MODEL_NAME || !modelData.hasOwnProperty(modelValue)) value = CUSTOM_METHOD_NAME;
-        if(!value && connector && connector.get('method')) value = connector.get('method');
-        bo.$attrs.methodValue = value; 
-        if(value !== CUSTOM_METHOD_NAME) connector.set('method', value);
-        return {
-          methodValue: value
-        };
-      },
-
-      set: function (element, values, node) {
-        var result = {};
-        if (values.methodValue !== '') {
-          result.methodValue = values.methodValue;
-        } else {
-          result.methodValue = undefined;
+        if (value && !modelData.hasOwnProperty(value)) {
+          value = CUSTOM_MODEL_NAME;
         }
-        return CmdHelper.updateProperties(element, result)
+        bo.$attrs.modelValue = value;
+        if (value !== CUSTOM_MODEL_NAME) {
+          connector.set('model', value);
+        }
       }
+      return {
+        modelValue: value
+      };
+    },
 
-    }));
-
-    group.entries.push(EntryFactory.textField({
-      id: 'method',
-      label: 'Method',
-      modelProperty: 'method',
-
-      get: function (element, node) {
-        var bo = getBusinessObject(element);
-        var connector = bo && getConnector(bo);
-        var value = connector && connector.get('method');
-        return {
-          method: value
-        };
-      },
-      set: function (element, values, node) {
-        var bo = getBusinessObject(element);
-        var connector = getConnector(bo);
-        return CmdHelper.updateBusinessObject(element, connector, {
-          method: values.method || undefined
-        });
-      },
-      hidden: function (element) {
-        return element.businessObject.$attrs.methodValue !== CUSTOM_METHOD_NAME
+    set: function (element, values, node) {
+      var res = {};
+      if (values.modelValue !== '') {
+        res.modelValue = values.modelValue;
+      } else {
+        res.modelValue = undefined;
       }
-    }));
+      return CmdHelper.updateProperties(element, res);
+    },
+  }));
 
-    group.entries.push(EntryFactory.textField({
-      id: 'args',
-      label: 'Arguments',
-      modelProperty: 'args',
-      expandable: true,
+  group.entries.push(EntryFactory.textField({
+    id: 'connectorModel',
+    label: 'Model',
+    modelProperty: 'model',
 
-      get: function (element, node) {
-        var bo = getBusinessObject(element);
-        var connector = bo && getConnector(bo);
-        var value = connector && connector.get('args');
-        return {
-          args: value
-        };
-      },
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      var connector = bo && getConnector(bo);
+      var value = connector && connector.get('model');
+      return {
+        model: value
+      };
+    },
 
-      set: function (element, values, node) {
-        var bo = getBusinessObject(element);
-        var connector = getConnector(bo);
-        return CmdHelper.updateBusinessObject(element, connector, {
-          args: values.args || undefined
-        });
+    set: function (element, values, node) {
+      var bo = getBusinessObject(element);
+      var connector = getConnector(bo);
+      return CmdHelper.updateBusinessObject(element, connector, {
+        model: values.model || undefined
+      });
+    },
+
+    hidden: function (element) {
+      return element.businessObject.$attrs.modelValue !== CUSTOM_MODEL_NAME
+    }
+  }));
+
+
+  group.entries.push(EntryFactory.selectBox({
+    id: 'methodValue',
+    label: 'Select Method',
+    selectOptions: getMethodOptions(modelValue, modelData),
+    modelProperty: 'methodValue',
+
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      var connector = bo && getConnector(bo);
+      var modelValue = bo.get('modelValue');
+      var value = bo.get('methodValue');
+      var selectBox = domQuery('select[name=methodValue]', node);
+      domClear(selectBox);
+      var METHOD_OPTIONS = getMethodOptions(modelValue, modelData);
+      METHOD_OPTIONS.forEach(function (option) {
+        var optionEntry = domify('<option value="' + escapeHTML(option.value) + '">' + escapeHTML(option.name) + '</option>');
+        selectBox.appendChild(optionEntry);
+      });
+
+      if (modelValue === CUSTOM_MODEL_NAME || !modelData.hasOwnProperty(modelValue)) {
+        value = CUSTOM_METHOD_NAME;
       }
+      if (!value && connector && connector.get('method')) {
+        value = connector.get('method');
+      }
+      bo.$attrs.methodValue = value;
+      if (value !== CUSTOM_METHOD_NAME) {
+        connector.set('method', value);
+      }
+      return {
+        methodValue: value
+      };
+    },
 
-    }));
+    set: function (element, values, node) {
+      var result = {};
+      if (values.methodValue !== '') {
+        result.methodValue = values.methodValue;
+      } else {
+        result.methodValue = undefined;
+      }
+      return CmdHelper.updateProperties(element, result)
+    }
+
+  }));
+
+  group.entries.push(EntryFactory.textField({
+    id: 'method',
+    label: 'Method',
+    modelProperty: 'method',
+
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      var connector = bo && getConnector(bo);
+      var value = connector && connector.get('method');
+      return {
+        method: value
+      };
+    },
+    set: function (element, values, node) {
+      var bo = getBusinessObject(element);
+      var connector = getConnector(bo);
+      return CmdHelper.updateBusinessObject(element, connector, {
+        method: values.method || undefined
+      });
+    },
+    hidden: function (element) {
+      return element.businessObject.$attrs.methodValue !== CUSTOM_METHOD_NAME
+    }
+  }));
+
+  group.entries.push(EntryFactory.textField({
+    id: 'args',
+    label: 'Arguments',
+    modelProperty: 'args',
+    expandable: true,
+
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      var connector = bo && getConnector(bo);
+      var value = connector && connector.get('args');
+      return {
+        args: value
+      };
+    },
+
+    set: function (element, values, node) {
+      var bo = getBusinessObject(element);
+      var connector = getConnector(bo);
+      return CmdHelper.updateBusinessObject(element, connector, {
+        args: values.args || undefined
+      });
+    }
+
+  }));
   //}
 
   /***************************************Model configuration for oe connector********************************************/
