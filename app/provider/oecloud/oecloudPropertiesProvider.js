@@ -9,6 +9,7 @@ import './UtilsOverride';
 import PropertiesActivator from 'bpmn-js-properties-panel/lib/PropertiesActivator';
 const ImplementationTypeHelper = require('bpmn-js-properties-panel/lib/helper/ImplementationTypeHelper');
 const ExtensionsElementHelper = require('bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper');
+const EventDefinitionHelper = require('bpmn-js-properties-panel/lib/helper/EventDefinitionHelper');
 
 import userTaskProps from './parts/UserTaskProps';
 import BusinessRuleTaskProps from './parts/BusinessRuleTaskProps';
@@ -113,7 +114,21 @@ function handleStartEvent(element, tabsArr) {
     tabsArr = tabsArr.filter(item => item.id !== 'forms');
     /* only show general and document groups on general tab */
     let generalTab = tabsArr.find(item => item.id === 'general');
-    generalTab.groups = generalTab.groups.filter(item => item.id === 'general' || item.id === 'documentation');
+    if (EventDefinitionHelper.getTimerEventDefinition(element.businessObject) ||
+      EventDefinitionHelper.getMessageEventDefinition(element.businessObject) ||
+      EventDefinitionHelper.getSignalEventDefinition(element.businessObject) ||
+      EventDefinitionHelper.getConditionalEventDefinition(element.businessObject)) {
+      /* Remove details tab. Keep only general, details and documentation tabs */
+      generalTab.groups = generalTab.groups.filter(item => ['general', 'details', 'documentation'].indexOf(item.id) >= 0);
+      
+      /* Remove initiator field from details tab*/
+      let detailsTab = generalTab.groups.find(item => item.id === 'details');
+      detailsTab.entries = detailsTab.entries.filter(item => item.id !== 'initiator');
+    } else {
+      /* Remove details tab. Keep only general and documentation tabs */
+      generalTab.groups = generalTab.groups.filter(item => item.id === 'general' || item.id === 'documentation');
+    }
+
   }
   return tabsArr;
 }
@@ -211,8 +226,8 @@ function handleScriptTask(element, tabsArr) {
   }
 
   /* show extension tab only for ScriptNode configured to act as SetPV */
-    tabsArr = tabsArr.filter(item => item.id !== 'extensionElements');
-  
+  tabsArr = tabsArr.filter(item => item.id !== 'extensionElements');
+
   return tabsArr;
 }
 
@@ -293,30 +308,30 @@ export default function oecloudPropertiesProvider(
         element.businessObject.extensionElements = undefined;
       }
     }
-      /** For Special SetPV Script Node, enable auto script update based on PV mappings */
-      if (element.type === 'bpmn:ScriptTask' && element.businessObject && element.businessObject.isUpdateVariablesType) {
+    /** For Special SetPV Script Node, enable auto script update based on PV mappings */
+    if (element.type === 'bpmn:ScriptTask' && element.businessObject && element.businessObject.isUpdateVariablesType) {
 
-        let propsExtension = ExtensionsElementHelper.getExtensionElements(element.businessObject, 'camunda:Properties');
-        propsExtension = propsExtension?propsExtension[0]:{};
-        let properties = propsExtension.values;
-        if(properties && Array.isArray(properties)){
-          element.businessObject.script = properties.map(item=> {
-            let text = '';
-            if(item.name){
-              let value = '';
-              if(item.value){
-                if(item.value[0]==='@'){
-                  /* an expression, set value as it is */
-                  value = item.value.substr(1);
-                } else {
-                  value = `'${item.value}'`;
-                }
+      let propsExtension = ExtensionsElementHelper.getExtensionElements(element.businessObject, 'camunda:Properties');
+      propsExtension = propsExtension ? propsExtension[0] : {};
+      let properties = propsExtension.values;
+      if (properties && Array.isArray(properties)) {
+        element.businessObject.script = properties.map(item => {
+          let text = '';
+          if (item.name) {
+            let value = '';
+            if (item.value) {
+              if (item.value[0] === '@') {
+                /* an expression, set value as it is */
+                value = item.value.substr(1);
+              } else {
+                value = `'${item.value}'`;
               }
-              text = `_setPV('${item.name}', ${value});`;
             }
-            return text;
-          }).join('\n');
-        }      
+            text = `_setPV('${item.name}', ${value});`;
+          }
+          return text;
+        }).join('\n');
+      }
     }
 
     ReduxStore.dispatch(diagramChangedAction());
