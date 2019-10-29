@@ -125,7 +125,7 @@ a:link {
   font-style: normal;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
-  max-height: 245px;
+  height: 245px;
   overflow: auto;
   padding: 0 0 5px 0px;
 }
@@ -247,10 +247,10 @@ select option {
 
 }
 .bpp-properties-group > .group-toggle:hover {
-  background-color: darkgray;
+  background-color: #018786;
 }
 .bpp-properties-group:hover > .group-toggle:hover {
-  background-color: darkgray;
+  background-color: #018786;
 }
 .bpp-properties-group.group-closed:hover > .group-label {
   color: #018786;
@@ -347,6 +347,9 @@ ul.bpp-properties-tabs-links > li {
   margin-left: 3px;
   margin-bottom: 0px;
 }
+.bpp-properties-group.group-closed {
+  max-height: 25px;
+}
 .bpp-properties-tab-bar:not(.scroll-tabs-overflow) .scroll-tabs-button {
   display: inline;
 }
@@ -382,7 +385,7 @@ select:focus {
   box-shadow: 0px 0px 0px 1px #c4c2c0;
   border-radius: 3px;
 }
-.bpp-field-wrapper:not(.bpp-dropdown) select:not(#camunda-message){
+.bpp-field-wrapper:not(.bpp-dropdown) select:not([id="camunda-message"]):not([id="cam-script-type"]){
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 70px;
@@ -427,9 +430,9 @@ select:focus {
   background: #14afae;
   width: 200px;
   position: fixed;
-  bottom: 12.2%;
-  left: 15px;
-  border-radius: 5px;
+  bottom: 76px;
+  left: 20px;
+  border-radius: 2px;
   outline: none;
 }
  .dropdown-item {
