@@ -47,11 +47,7 @@ function ConfigureButtons(bpmnModeler) {
     }
   }
   window.addEventListener('open-diagram', function(evt){
-    let fileName = evt.detail;
-    if(!fileName.endsWith('.bpmn')){
-      fileName = `${fileName}.bpmn`;
-    }
-    fetchDiagramData(fileName);
+    fetchDiagramData(evt.detail);
   });
   communicator.onDiagramContent(function (data) {
     openDiagram(path.basename(data.path), data.path, new TextDecoder('utf-8').decode(Buffer.from(data.fileContents)));
@@ -93,11 +89,11 @@ function ConfigureButtons(bpmnModeler) {
         allFolders[pathObject.dir] = 1;
       }
       return {
-        fullPath: entry,
-        name: pathObject.base.replace(pathObject.ext, '')
+        fullPath: entry.replace(pathObject.ext, ''),
+        name: pathObject.base.replace(pathObject.ext, ''),
+        ext: pathObject.ext
       };
     });
-
 
     ReduxStore.dispatch(setFilesAction(allFiles));
     ReduxStore.dispatch(receiveFlowsSuccessAction(allFiles.map(entry => entry.name)));
@@ -320,8 +316,8 @@ function ConfigureButtons(bpmnModeler) {
 
   function getFilename(extn) {
     let state = ReduxStore.getState();
-    let fileName = state.fileName || 'diagram.bpmn';
-    fileName = fileName.replace(/bpmn$/, extn);
+    let fileName = state.fileName || 'workflow-diagram';
+    fileName = extn && !fileName.endsWith(extn)?`${fileName}.${extn}`: fileName;
     return {
       name: fileName,
       fullName: path.join(state.filePath || state.primaryFolder || '.', fileName)
@@ -357,7 +353,7 @@ function ConfigureButtons(bpmnModeler) {
       if (ReduxStore.getState().version === 'v1') {
         data = convertToOld(data);
       }
-      communicator.saveDiagramContent(getFilename('bpmn').fullName, data);
+      communicator.saveDiagramContent(getFilename().fullName, data);
     });
   });
 }

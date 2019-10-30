@@ -1,6 +1,6 @@
 module.exports = {
-  flows: ['process-one.bpmn', 'process-two.bpmn', 'process-three.bpmn'],
-  rules: ['decision-one.dmn', 'decision-two.dmn', 'decision-three.dmn'],
+  flows: ['process-one', 'process-two', 'process-three'],
+  rules: ['decision-one', 'decision-two', 'decision-three'],
   models: {
       Account: {
         create: '[options, data]',

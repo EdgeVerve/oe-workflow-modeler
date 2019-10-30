@@ -94,12 +94,12 @@ module.exports = {
       app.get('/files/:name', function(req, res){
         let fileName = req.params.name;
         res.contentType('application/text');
-        res.sendFile(`${__dirname}/resources/${fileName}`, {headers:{'content-type': 'application/text'}});
+        res.sendFile(`${__dirname}/resources/${fileName}.bpmn`, {headers:{'content-type': 'application/text'}});
       });
 
       app.post('/files/:name', function(req, res){
         let fileName = req.params.name;
-        fs.writeFile(`${__dirname}/resources/${fileName}`, req.body, (err) => {
+        fs.writeFile(`${__dirname}/resources/${fileName}.bpmn`, req.body, (err) => {
           if (err) throw err;
           res.contentType('application/json');
           res.json({name: fileName, message: 'File Saved'});
