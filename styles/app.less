@@ -175,6 +175,7 @@ select option {
   margin: 0;
   list-style: none;
 }
+
 #workflow {
   height: 40px;
   width: 40px;
@@ -338,7 +339,7 @@ ul.bpp-properties-tabs-links > li {
 .bpp-properties-panel input:focus:not(.invalid), 
 .bpp-properties-panel textarea:focus:not(.invalid), 
 .bpp-properties-panel [contenteditable]:focus:not(.invalid),
-.bpp-field-wrapper select:focus,
+.bpp-field-wrapper select:focus
 {
   border: 1px solid darkgrey;
   box-shadow: 0 0 0 1px darkgrey;
@@ -394,11 +395,15 @@ select:focus {
 #props-toggle.move-toggle {
   right: 0px;
 }
-#upload-file {
- font-size: medium;
- cursor: pointer;
- padding-bottom: 10px;
+
+.common-menu {
+  padding-bottom: 10px;
 }
+.common-menu a {
+ font-size: small;
+ cursor: pointer;
+}
+
 #props-toggle.closed span{
   transform: rotate(-180deg);
 }
