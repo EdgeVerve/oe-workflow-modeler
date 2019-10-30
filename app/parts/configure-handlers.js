@@ -194,9 +194,13 @@ function ConfigureButtons(bpmnModeler) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
       evt.currentTarget.blur();
-      ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
     }
   });
+
+  $('#js-file-name').blur(function (evt) {
+    ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
+  });
+
   $('#errorClose').click(function (evt) {
     $('#error').addClass('hidden');
   });
