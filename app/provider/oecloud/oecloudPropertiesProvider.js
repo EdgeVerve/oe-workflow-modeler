@@ -119,7 +119,7 @@ function handleStartEvent(element, tabsArr) {
       EventDefinitionHelper.getConditionalEventDefinition(element.businessObject)) {
       /* Remove details tab. Keep only general, details and documentation tabs */
       generalTab.groups = generalTab.groups.filter(item => ['general', 'details', 'documentation'].indexOf(item.id) >= 0);
-      
+
       /* Remove initiator field from details tab*/
       let detailsTab = generalTab.groups.find(item => item.id === 'details');
       detailsTab.entries = detailsTab.entries.filter(item => item.id !== 'initiator');
@@ -256,6 +256,18 @@ function handleServiceTask(element, tabsArr, bpmnFactory, elementRegistry) {
   return tabsArr;
 }
 
+function handleSequenceFlow(element, tabsArr) {
+  if (element.type === 'bpmn:SequenceFlow') {
+    let bo = element.businessObject;
+    if (bo && bo.sourceRef && bo.sourceRef.default === bo) {
+      let generalTab = tabsArr.find(item => item.id === 'general');
+      let detailsGroup = generalTab.groups.find(item => item.id === 'details');
+      detailsGroup.entries = [];
+    }
+  }
+  return tabsArr;
+}
+
 export default function oecloudPropertiesProvider(
   eventBus, bpmnFactory, canvas,
   elementRegistry, translate, propertiesProvider) {
@@ -276,7 +288,7 @@ export default function oecloudPropertiesProvider(
     tabs = handleCallActivity(element, tabs);
     tabs = handleScriptTask(element, tabs);
     tabs = handleServiceTask(element, tabs, bpmnFactory, elementRegistry);
-
+    tabs = handleSequenceFlow(element, tabs);
     // if (element && element.businessObject && element.businessObject.$attrs && element.businessObject.$attrs.disableEdit) {
     //   tabs.forEach(t => {
     //     t.groups.forEach(g => {

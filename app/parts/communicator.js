@@ -95,9 +95,9 @@ export default class Communicator {
     window.addEventListener('ipc-server-event', this._boundResponseEventHandler);
 
     this.getFlowFiles();
+    this.getExtensions();
     this.getRuleFiles();
     this.getModels();
-    this.getExtensions();
   }
 
 
@@ -194,7 +194,7 @@ export default class Communicator {
   getFileContent(fileName) {
     if (this.isStudioMode) {
       this._sendToStudio('open-selected-file', {
-        path: fileName
+        path: `${fileName}.bpmn`
       });
     } else {
       var self = this;
@@ -215,7 +215,7 @@ export default class Communicator {
   saveDiagramContent(fileName, fileContent) {
     if (this.isStudioMode) {
       this._sendToStudio('save-file-content', {
-        path: fileName,
+        path: `${fileName}.bpmn`,
         content: fileContent
       });
     } else {

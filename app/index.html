@@ -61,11 +61,6 @@
     <span id="js-file-name" contenteditable></span>
 
     <div class="menu-items hidden">
-      <!-- <button id="js-file-node" class="mdc-fab" aria-label="Expand" data-file="/ft/ft-node-server/diagram.bpmn"> -->
-      <!-- <button id="js-file-node" class="mdc-fab" aria-label="Expand" data-file="process-one.bpmn">
-          <span class="mdc-fab__icon material-icons">folder</span>
-      </button> -->
-
       <select id="oe-version" class="custom-select" id="inlineFormCustomSelect">
         <option value="v1">v1</option>
         <option value="v2">v2</option>
@@ -105,7 +100,10 @@
     </div>
     <div class="dropdown-divider"></div>
     <input id="file-input" type="file" hidden>
-    <a id="upload-file" class="dropdown-item" tabindex="0">Upload File</a>
+    <div class="common-menu">
+      <a id="upload-file" class="dropdown-item" tabindex="0">Load File</a>
+      <a class="js-create-diagram dropdown-item" tabindex="0">New</a>
+    </div>
   </div>
   <div id="error" class="alert alert-danger alert-dismissible hidden">
     <strong>Error! </strong>
