@@ -144,6 +144,10 @@ function ConfigureButtons(bpmnModeler) {
       $('.buttons').removeClass('hidden');
       $('#props-toggle').removeClass('hidden');
       $('#js-properties-panel').removeClass('closed');
+      $('#props-toggle').removeClass('closed');
+      $('.buttons').removeClass('move');
+      $('.menu-items').removeClass('move-items');
+      $('#props-toggle').removeClass('move-toggle');
       $('#error').addClass('hidden');
       container
         .removeClass('with-error')
@@ -272,6 +276,7 @@ function ConfigureButtons(bpmnModeler) {
 
   $('.js-create-diagram').click(function (e) {
     openDiagram('newDiagram.bpmn', null, diagramXML);
+    $('#file-list').addClass('hidden');
   });
 
   $('#js-menu').click(function (e) {
@@ -288,7 +293,6 @@ function ConfigureButtons(bpmnModeler) {
   });
 
   $('#open-local-file').click(function (e) {
-    e.stopPropagation();
     $('#file-list').toggleClass('hidden');
   });
 
