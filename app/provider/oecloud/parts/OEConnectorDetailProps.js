@@ -183,7 +183,7 @@ function OEConnectorDetailProps(group, element, bpmnFactory) {
         value = connector.get('method');
       }
       bo.$attrs.methodValue = value;
-      if (value !== CUSTOM_METHOD_NAME) {
+      if (connector && value !== CUSTOM_METHOD_NAME) {
         connector.set('method', value);
       }
       return {

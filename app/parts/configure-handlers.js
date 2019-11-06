@@ -131,15 +131,19 @@ function ConfigureButtons(bpmnModeler) {
       $('#js-file-name').html(newState.fileName);
     }
     if (newState.errorMessage) {
-      document.dispatchEvent(new CustomEvent('error', {
-        detail: { message: "Invalid File, Upload a BPMN file" }
-      }));
+      window.dispatchEvent(new CustomEvent('oe-show-error', {detail: {
+        message: `Invalid file type, Upload BPMN file`
+      }
+    }));
       container
         .removeClass('with-diagram')
         .addClass('with-error');
 
       container.find('.error pre').text(newState.errorMessage);
       console.error(newState.errorMessage);
+      $('#props-toggle').addClass('hidden');
+      $('.buttons').addClass('hidden');
+      $('#js-properties-panel').addClass('closed');
     } else {
       $('.buttons').removeClass('hidden');
       $('#props-toggle').removeClass('hidden');
@@ -154,8 +158,7 @@ function ConfigureButtons(bpmnModeler) {
         .addClass('with-diagram');
     }
   });
- 
-  document.addEventListener("error", errorMessageHandler);
+
   Subscribe(['fileName', 'hasChanged'], function (newState) {
     let element = $('#js-file-name');
     if (newState.hasChanged) {
@@ -200,10 +203,6 @@ function ConfigureButtons(bpmnModeler) {
   $('#js-file-name').blur(function (evt) {
     ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
   });
-
-  $('#errorClose').click(function (evt) {
-    $('#error').addClass('hidden');
-  });
   function openDiagram(fileName, filePath, xml) {
     let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
@@ -232,13 +231,6 @@ function ConfigureButtons(bpmnModeler) {
       callback(file.name, file.path, xml);
     };
     reader.readAsText(file);
-  }
-  function errorMessageHandler(e) {
-    $('#error').removeClass('hidden');
-    $("#errorM").html(e.detail.message);
-    $('#props-toggle').addClass('hidden');
-    $('.buttons').addClass('hidden');
-    $('#js-properties-panel').addClass('closed');
   }
   function registerFileDrop(container, callback) {
 
