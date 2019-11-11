@@ -150,7 +150,6 @@ function ConfigureButtons(bpmnModeler) {
       $('#js-properties-panel').removeClass('closed');
       $('#props-toggle').removeClass('closed');
       $('.buttons').removeClass('move');
-      $('.menu-items').removeClass('move-items');
       $('#props-toggle').removeClass('move-toggle');
       $('#error').addClass('hidden');
       container
@@ -280,7 +279,6 @@ function ConfigureButtons(bpmnModeler) {
     $('#props-toggle').toggleClass('closed');
     $('#js-properties-panel').toggleClass('closed');
     $('.buttons').toggleClass('move');
-    $('.menu-items').toggleClass('move-items');
     $('#props-toggle').toggleClass('move-toggle');
   });
 
