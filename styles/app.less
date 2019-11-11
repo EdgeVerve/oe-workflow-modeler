@@ -157,16 +157,6 @@ select option {
 .menu-items.move-items {
   right: 110px;
 }
-.alert {
-  position: absolute;
-  bottom: 16px;
-  left: 80px;
-  list-style: none;
-  font-size: 16px;
-}
-.alert-dismissible .close {
-  padding: 12px 16px;
-}
 #open-local-file {
   position: fixed;
   bottom: 20px;
@@ -242,10 +232,13 @@ select option {
 .bpp-properties-header {
   display: none;
 }
-.bpp-properties-panel input:focus{
+.bpp-properties-panel input:focus:not([type="checkbox"]){
   outline: none;
   box-shadow: 0 2px 0 0 rgba(82, 180, 21, 0.2);
-
+}
+.bpp-properties-panel input[type="checkbox"]:focus{
+  outline: none;
+  box-shadow: none;
 }
 .bpp-properties-group > .group-toggle:hover {
   background-color: #018786;
@@ -261,7 +254,7 @@ ul.bpp-properties-tabs-links {
   display: flex;
   position: relative;
   height: 48px;
-  background-color: #fff;
+  background-color: #f8f8f8;
   margin: 0 auto;
   width: 100%;
   white-space: nowrap;
@@ -295,7 +288,9 @@ ul.bpp-properties-tabs-links > li {
   overflow: hidden;
   letter-spacing: .8px;
 }
-
+.bpp-properties-group + .bpp-properties-group {
+   border-top: none;
+}
 .bpp-textfield input,
 .bpp-properties-panel [contenteditable],
 .bpp-field-wrapper input {
@@ -336,7 +331,7 @@ ul.bpp-properties-tabs-links > li {
   border-color: #c4c2c0;
   box-shadow: 0px 0px 0px 1px #c4c2c0;
 }
-.bpp-properties-panel input:focus:not(.invalid), 
+.bpp-properties-panel input:focus:not(.invalid):not([type="checkbox"]),
 .bpp-properties-panel textarea:focus:not(.invalid), 
 .bpp-properties-panel [contenteditable]:focus:not(.invalid),
 .bpp-field-wrapper select:focus
