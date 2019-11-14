@@ -1,5 +1,2 @@
-tmp/
-node_modules/
-copier.sh
-*.zip
-dist/index.js
+/node_modules/
+package-lock.json

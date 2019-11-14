@@ -1,39 +1,43 @@
 {
   "name": "oe-workflow-modeler",
-  "version": "0.0.0",
-  "description": "A oeCloud compatible bpmn-js modeler",
-  "main": "app/index.js",
+  "description": "A template element , used to create oe-ui Polymer 3 elements",
+  "version": "2.1.0",
+  "main": "oe-workflow-modeler.js",
+  "dependencies": {
+    "@polymer/iron-collapse": "^3.0.1",
+    "@polymer/iron-flex-layout": "^3.0.1",
+    "@polymer/iron-icon": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/iron-pages": "^3.0.1",
+    "@polymer/paper-dialog": "^3.0.1",
+    "@polymer/paper-dropdown-menu": "^3.0.1",
+    "@polymer/paper-menu-button": "^3.0.1",
+    "@polymer/paper-tabs": "^3.0.1",
+    "@polymer/polymer": "^3.1.0",
+    "@polymer/iron-selector": "^3.0.1",
+    "@polymer/paper-checkbox": "^3.1.0",
+    "oe-checkbox": "^2.0.0",
+    "oe-combo": "^2.0.0",
+    "oe-input": "^2.0.0",
+    "oe-mixins": "^2.0.0",
+    "oe-ui-forms": "^2.0.0",
+    "oe-utils": "^2.0.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.2",
+    "@webcomponents/webcomponentsjs": "^2.2.7",
+    "@polymer/iron-component-page": "^4.0.1",
+    "@polymer/iron-test-helpers": "^3.0.1",
+    "@polymer/test-fixture": "^4.0.2",
+    "axe-core": "3.1.2",
+    "chai": "4.2.0",
+    "mocha": "5.2.0",
+    "sinon": "7.2.3",
+    "wct-mocha": "1.0.0"
+  },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/EdgeVerve/oe-workflow-modeler.git"
-  },
-  "keywords": [
-    "oecloud, oe-workflow"
-  ],
-  "license": "MIT",
-  "devDependencies": {
-    "brfs": "^1.2.0",
-    "grunt": "~1.0.1",
-    "grunt-browserify": "^5.0.0",
-    "grunt-contrib-connect": "~1.0.2",
-    "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-jshint": "~1.0.0",
-    "grunt-contrib-less": "^1.0.1",
-    "grunt-contrib-uglify": "^3.0.1",
-    "grunt-contrib-watch": "~1.0.0",
-    "load-grunt-tasks": "~3.5.0"
-  },
-  "dependencies": {
-    "bpmn-js": "^0.15.0",
-    "oe-workflow-properties-panel": "git+https://github.com/EdgeVerve/oe-workflow-properties-panel.git#master",
-    "oe-camunda-bpmn-moddle": "git+https://github.com/EdgeVerve/oe-camunda-bpmn-moddle.git#master",
-    "diagram-js": "^0.15.0",
-    "jquery": "^2.1.1",
-    "lodash": "^3.0.0"
-  },
-  "scripts": {
-    "build": "grunt dist",
-    "start": "grunt auto-build",
-    "dist": "grunt build"
   }
 }
