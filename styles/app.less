@@ -151,11 +151,22 @@ select option {
   font-family: Arial, Helvetica, sans-serif;
   background: #dfdfdf;
 }
-.buttons.move {
-  right: 30px;
+#js-file-name {
+ position: fixed;
+ right: 425px;
+ top:50px;
 }
-.menu-items.move-items {
-  right: 110px;
+.menu-items:not(.hidden) ~ #js-file-name{
+  right: 620px;
+}
+.buttons.move > .menu-items:not(.hidden) ~ #js-file-name {
+  right: 300px;
+}
+.buttons.move > #js-file-name {
+  right:100px;
+}
+.buttons.move {
+  right: -90px;
 }
 #open-local-file {
   position: fixed;
@@ -176,10 +187,9 @@ select option {
   margin-bottom: 12px;
 }
 .menu-items {
-  position: fixed;
-  bottom: 97%;
-  right: 430px;
-  top: 6%;
+  position: relative;
+  right: 195px;
+  top: 60px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -193,10 +203,9 @@ select option {
   list-style: none;
 }
 .buttons {
-  position: fixed;
-  bottom: 97%;
-  right: 350px;
-  top: 4%;
+  position: absolute;
+  right: 230px;
+  top: -25px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -263,13 +272,29 @@ ul.bpp-properties-tabs-links > li > a {
   border-left: none;
   border-right: none;
   border-top:none;
+  background: none;
+}
+.bpp-properties-panel button:focus {
+  border-color: none;
+  box-shadow: none;
+  color: darkgray;
 }
 ul.bpp-properties-tabs-links > li.bpp-active a {
+  font-weight: 700;
   padding-bottom: 5px;
-  border-bottom: 2px solid darkgrey;
   border-left: none;
   border-right: none;
   border-top:none;
+}
+ul.bpp-properties-tabs-links > li + li {
+  margin-left: 0px;
+}
+ul.bpp-properties-tabs-links > li.bpp-active {
+  border-bottom: 2px solid darkgrey;
+  background: #e8e5e5;
+}
+ul.bpp-properties-tabs-links > li:hover:not(.bpp-active) {
+  background: #efefef;
 }
 ul.bpp-properties-tabs-links > li {
   -webkit-box-flex: 1;
@@ -314,7 +339,7 @@ ul.bpp-properties-tabs-links > li {
 .bpp-select button.add:hover, 
 .bpp-element-list button.add:hover, 
 .bpp-select button.clear:hover, 
-.bpp-element-list button.clear:hover,
+.bpp-element-list button.clear:hover:not(:disabled),
 .bpp-table-add-row > button:hover,
 .bpp-table-row .clear:hover {
   background: darkgrey;
@@ -349,6 +374,9 @@ ul.bpp-properties-tabs-links > li {
 .bpp-properties-tab-bar:not(.scroll-tabs-overflow) .scroll-tabs-button {
   display: inline;
 }
+.bpp-properties-tab-bar .scroll-tabs-button {
+  font-size: 21px;
+}
 .bpp-field-wrapper textarea{
   height: 26px;
   border-radius: 5px;
@@ -381,12 +409,14 @@ select:focus {
   box-shadow: 0px 0px 0px 1px #c4c2c0;
   border-radius: 3px;
 }
-.bpp-field-wrapper:not(.bpp-dropdown) select:not([id="camunda-message"]):not([id="cam-script-type"]){
+.bpp-element-list select{
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 70px;
 }
-
+.bpp-select select {
+  height: 26px;
+}
 #props-toggle.move-toggle {
   right: 0px;
 }
@@ -494,18 +524,19 @@ select:focus {
       transition: opacity 0.2s ease-in; 
     }
     .modal-close {
-      color: #aaa;
+      color: #232325;
       position: absolute;
-      right: 5px;
+      right: 15px;
       top: 5px;
-      padding-top: 3px;
-      background: #fff;
-      font-size: 16px;
+      padding-top: 1px;
+      background: #ffffff;
+      font-size: 18px;
       width: 25px;
       height: 25px;
       font-weight: bold;
       text-align: center;
       cursor: pointer;
+      margin-bottom: 0px;
       &:hover { color: #333; }        
     }      
     .modal-content-btn {
@@ -513,15 +544,16 @@ select:focus {
       text-align: center;
       cursor: pointer;
       bottom: 20px;
-      right: 30px;
+      right: 20px;
       background: #446CB3;
       color: #fff;
       width: 50px;
       border-radius: 2px;
       font-size: 12px;
       height: 32px;
-      padding-top: 9px;
+      padding-top:7.5px;
       font-weight: normal;
+      margin-bottom: 0px;
       &:hover { color: #fff; background: #365690; }
     }
     #modal-toggle {
@@ -564,5 +596,8 @@ select:focus {
     height: 300px;
     width: 540px;
     padding: 10px 0px;
+  }
+  .monaco-editor .view-overlays .current-line {
+    border: none;
   }
 }
