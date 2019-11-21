@@ -271,10 +271,14 @@ function ConfigureButtons(bpmnModeler) {
   });
 
   $('#js-menu').click(function (e) {
-    e.stopPropagation();
     $('.menu-items').toggleClass('hidden');
   });
-
+  $(document).mouseup(function (e) { 
+    if(e.target.id !== 'js-menu' && e.target.id !== 'open-local-file' && e.target.parentNode.id !== 'js-menu' && e.target.parentNode.id !== 'open-local-file'){
+      $('.menu-items').addClass('hidden');
+      $('#file-list').addClass('hidden');
+    }
+  }); 
   $('#props-toggle').click(function (e) {
     $('#props-toggle').toggleClass('closed');
     $('#js-properties-panel').toggleClass('closed');
