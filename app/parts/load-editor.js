@@ -78,6 +78,7 @@ function ConfigureScriptEditor(){
   });
   
   window.addEventListener('open-script-editor', function(evt){
+    scriptEditor.focus();
     scriptEditor.setValue(evt.detail.script || '');
     callback = evt.detail.cb;
     $('#modal-toggle')[0].checked = true;
