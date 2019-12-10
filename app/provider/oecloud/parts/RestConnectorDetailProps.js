@@ -103,6 +103,7 @@ function RestConnectorDetailProps(group, element, bpmnFactory) {
     id: 'connectorData',
     label: 'Data',
     modelProperty: 'data',
+    description: 'For http GET method, set data as \'{}\' to enable JSON parsing of response.',
 
     get: function (element, node) {
       var bo = getBusinessObject(element);
