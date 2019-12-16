@@ -13,6 +13,7 @@ function CreateModeler(canvasSelector, panelSelector){
 
   var bpmnModeler = new BpmnModeler({
     container: canvasSelector,
+    keyboard: { bindTo: document },
     propertiesPanel: {
       parent: panelSelector
     },
