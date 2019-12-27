@@ -85,3 +85,25 @@ export function changeVersionAction(version) {
     version
   };
 }
+
+export const PUSH_ACTIVITY_FLOW = 'PUSH_ACTIVITY_FLOW';
+export function pushActivityFlow(flow) {
+  return {
+    type: PUSH_ACTIVITY_FLOW,
+    flow
+  };
+}
+
+export const POP_ACTIVITY_FLOW = 'POP_ACTIVITY_FLOW';
+export function popActivityFlow() {
+  return {
+    type: POP_ACTIVITY_FLOW
+  };
+}
+
+export const EMPTY_ACTIVITY_FLOW = 'EMPTY_ACTIVITY_FLOW';
+export function emptyActivityFlow() {
+  return {
+    type: EMPTY_ACTIVITY_FLOW
+  };
+}

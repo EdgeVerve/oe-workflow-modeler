@@ -192,6 +192,7 @@ export default class Communicator {
   }
 
   getFileContent(fileName) {
+    if(fileName.endsWith('.bpmn')) fileName = fileName.slice(0,-5);
     if (this.isStudioMode) {
       this._sendToStudio('open-selected-file', {
         path: `${fileName}.bpmn`
@@ -213,6 +214,7 @@ export default class Communicator {
     this._onDiagramContent = callback;
   }
   saveDiagramContent(fileName, fileContent) {
+    if(fileName.endsWith('.bpmn')) fileName = fileName.slice(0,-5);
     if (this.isStudioMode) {
       this._sendToStudio('save-file-content', {
         path: `${fileName}.bpmn`,
