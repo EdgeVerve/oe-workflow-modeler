@@ -11,7 +11,8 @@ const initialState = {
   rules: [],
   files: [],
   extensions: [],
-  version: 'v2'
+  version: 'v2',
+  activityFlow: []
 };
 
 
@@ -63,6 +64,18 @@ function modelerApp(state = initialState, action) {
     case Actions.CHANGE_VERSION:
       return Object.assign({}, state, {
         version: action.version
+      });
+    case Actions.PUSH_ACTIVITY_FLOW:
+      return Object.assign({}, state, {
+        activityFlow: [...state.activityFlow, action.flow]
+      });
+    case Actions.POP_ACTIVITY_FLOW:
+      return Object.assign({}, state, {
+        activityFlow: state.activityFlow.slice(0,-1)
+      });
+    case Actions.EMPTY_ACTIVITY_FLOW: 
+      return Object.assign({}, state, {
+        activityFlow: []
       });
     default:
       return state;

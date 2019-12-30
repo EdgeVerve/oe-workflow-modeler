@@ -17,7 +17,9 @@ import {
   extensionsReceivedAction,
   setPrimaryFolderAction,
   setFilesAction,
-  changeVersionAction
+  changeVersionAction,
+  popActivityFlow,
+  emptyActivityFlow
 } from '../state/actions';
 
 import Communicator from './communicator';
@@ -32,7 +34,10 @@ function ConfigureButtons(bpmnModeler) {
 
   var communicator = new Communicator();
 
-  function fetchDiagramData(fileName){
+  function fetchDiagramData(detail){
+    
+    detail.callback = detail.callback || function(){};
+    let fileName = detail.name;
     
     let state = ReduxStore.getState();
     if(state.hasChanged){
@@ -40,10 +45,15 @@ function ConfigureButtons(bpmnModeler) {
         message: `Changes to ${state.fileName} will be lost. Continue?`,
         ok: function(){
           communicator.getFileContent(fileName);
+          detail.callback(true);
+        },
+        cancel: function(){
+          detail.callback(false);
         }
       }}))
     } else {
       communicator.getFileContent(fileName);
+      detail.callback(true);
     }
   }
   window.addEventListener('open-diagram', function(evt){
@@ -177,7 +187,15 @@ function ConfigureButtons(bpmnModeler) {
     $(".dropdown1-menu .list a").click(function (e) {
       var fileName = $(this).text();
       if (fileName) {
-        fetchDiagramData(fileName);
+        fetchDiagramData({
+          name: fileName, 
+          callback: function(isOpened){
+            if(isOpened) {
+              ReduxStore.dispatch(emptyActivityFlow());
+              $('#view-parent-flow').addClass('hidden');
+            }
+          }
+        });
         $('#file-list').addClass('hidden');
       }
     });
@@ -211,6 +229,7 @@ function ConfigureButtons(bpmnModeler) {
       version = 'v1'
     }
     $('select option').removeAttr('selected').filter('[value=' + version + ']').attr('selected', true);
+    ReduxStore.getState().activityFlow.length ? $('#view-parent-flow').removeClass('hidden') : $('#view-parent-flow').addClass('hidden');
     ReduxStore.dispatch(changeVersionAction(version));
     /* Always convert to New for editing */
     xml = loadAsNew(xml);
@@ -230,6 +249,8 @@ function ConfigureButtons(bpmnModeler) {
       callback(file.name, file.path, xml);
     };
     reader.readAsText(file);
+    ReduxStore.dispatch(emptyActivityFlow());
+    $('view-parent-flow').addClass('hidden');
   }
   function registerFileDrop(container, callback) {
 
@@ -267,6 +288,8 @@ function ConfigureButtons(bpmnModeler) {
 
   $('.js-create-diagram').click(function (e) {
     openDiagram('newDiagram.bpmn', null, diagramXML);
+    ReduxStore.dispatch(emptyActivityFlow());
+    $('#view-parent-flow').addClass('hidden');
     $('#file-list').addClass('hidden');
   });
 
@@ -275,8 +298,9 @@ function ConfigureButtons(bpmnModeler) {
   });
   $(document).mouseup(function (e) { 
     if(e.target.id !== 'js-menu' && e.target.id !== 'open-local-file' && 
-    e.target.id !== 'upload-file' && e.target.id !== 'oe-version' && 
-    e.target.parentNode.id !== 'js-menu' && e.target.parentNode.id !== 'open-local-file'){
+    e.target.id !== 'upload-file' && e.target.id !== 'oe-version' && e.target.id !== 'srch-term' 
+    && e.target.parentNode.id !== 'srch-btn' && e.target.parentNode.id !== 'js-menu' && 
+    e.target.parentNode.id !== 'open-local-file'){
       $('.menu-items').addClass('hidden');
       $('#file-list').addClass('hidden');
     }
@@ -303,6 +327,21 @@ function ConfigureButtons(bpmnModeler) {
       readFileText(file, openDiagram);
     }
   });
+
+  $('#view-parent-flow').click(function () {
+    var actArray = ReduxStore.getState().activityFlow;
+    window.dispatchEvent(
+      new CustomEvent('open-diagram', {
+        detail: {
+          name: actArray[actArray.length-1],
+          callback: function(isOpened){
+            if(isOpened){
+              ReduxStore.dispatch(popActivityFlow());
+            }
+          }
+        }
+      }));
+  })
 
   function downloadFile(filename, data) {
     let link = document.createElement('a');
