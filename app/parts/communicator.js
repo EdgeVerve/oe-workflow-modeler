@@ -73,7 +73,8 @@ export default class Communicator {
       if(evt.target.status >= 200 && evt.target.status < 300){
         callback(null, evt.target.response);
       } else {
-        callback(evt.target.statusText, null);
+        let error = evt.target.response? (evt.target.response.error ? evt.target.response.error : evt.target.response): evt.target.statusText;
+        callback(error, null);
       }
     });
     oReq.addEventListener('error', function(err){
