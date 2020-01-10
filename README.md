@@ -9,14 +9,33 @@ Install all required dependencies:
 
 ```
 npm install
-npm install -g grunt-cli
+npm install -g webpack
 ```
 
 Build and run the project
 
 ```
-grunt auto-build
+npm run dev
 ```
+
+## Enabling workflow modeler
+
+```
+npm install oe-workflow-modeler
+```
+
+Add following to the _server/component-config.json_
+
+```
+{
+  "oe-workflow-modeler/component": {
+    "mountPath": "/wfmodeler",
+    "extensionsPath": "../../extensions.json"
+  }
+}
+```
+
+
 
 
 ## License
