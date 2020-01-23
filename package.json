@@ -1,6 +1,6 @@
 {
   "name": "oe-workflow-modeler",
-  "version": "0.0.6",
+  "version": "2.2.0",
   "description": "oeCloud Workflow Modeler",
   "main": "app/index.js",
   "scripts": {
@@ -49,7 +49,7 @@
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#master",
+    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#2.2.0",
     "@material/fab": "^3.1.0",
     "bpmn-js": "^5.0.3",
     "bpmn-js-properties-panel": "^0.32.0",
