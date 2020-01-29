@@ -41,7 +41,16 @@ module.exports = {
         test: /\.css$/,
         include: MONACO_DIR,
         use: ['style-loader', 'css-loader'],
-      }, {
+      },{
+        test: /\.ttf$/,
+        include: MONACO_DIR,
+
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+    }, {
         test: /\.less$/,
         use: [MiniCssExtractPlugin.loader, /*'style-loader',*/ 'css-loader', 'less-loader'],
       }
