@@ -186,6 +186,17 @@
           "type": "String"
         }
       ]
+    },
+    {
+      "name": "DmnCapable",
+      "extends": ["bpmn:BusinessRuleTask"],
+      "properties": [
+        {
+          "name": "mode",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
     }
   ]
 }
