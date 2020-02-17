@@ -298,8 +298,8 @@ function ConfigureButtons(bpmnModeler) {
   });
   $(document).mouseup(function (e) { 
     if(e.target.id !== 'js-menu' && e.target.id !== 'open-local-file' && 
-    e.target.id !== 'upload-file' && e.target.id !== 'oe-version' && e.target.id !== 'srch-term' 
-    && e.target.parentNode.id !== 'srch-btn' && e.target.parentNode.id !== 'js-menu' && 
+    e.target.id !== 'upload-file' && e.target.id !== 'oe-version' && e.target.id !== 'srch-term' 
+    && e.target.parentNode.id !== 'srch-btn' && e.target.parentNode.id !== 'js-menu' && 
     e.target.parentNode.id !== 'open-local-file'){
       $('.menu-items').addClass('hidden');
       $('#file-list').addClass('hidden');
