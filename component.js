@@ -16,8 +16,8 @@ function configureRoutes(app, options) {
     };
   }
 
-  if (options.extensionsPath) {
-    router.get('/extensions', function getExtensions(req, res, next) {
+  router.get('/extensions', function getExtensions(req, res, next) {
+    if (options.extensionsPath) {
       let extensionsFile = path.join(__dirname, options.extensionsPath);
       try {
         let extensions = require(extensionsFile);
@@ -25,8 +25,10 @@ function configureRoutes(app, options) {
       } catch (err) {
         next(err);
       }
-    });
-  }
+    } else {
+      res.send([]);
+    }
+  });
 
   router.get('/flows', function getFlows(req, res, next) {
     var filter = {

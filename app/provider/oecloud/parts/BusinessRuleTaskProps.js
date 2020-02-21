@@ -68,6 +68,9 @@ export default function (group, element) {
       }, {
         name: 'Decision Service',
         value: 'DecisionService'
+      }, {
+        name: 'Decision Tree',
+        value: 'DecisionTree'
       }],
       modelProperty: 'mode'
     }));
