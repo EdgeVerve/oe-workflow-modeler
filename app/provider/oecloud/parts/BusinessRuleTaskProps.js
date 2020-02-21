@@ -59,6 +59,19 @@ export default function (group, element) {
       }
     }));
 
+    group.entries.push(EntryFactory.selectBox({
+      id: 'mode',
+      label: 'Mode',
+      selectOptions :[{
+        name: 'Decision Table',
+        value: 'DecisionTable'
+      }, {
+        name: 'Decision Service',
+        value: 'DecisionService'
+      }],
+      modelProperty: 'mode'
+    }));
+    
 
     // completionHook
     group.entries.push(EntryFactory.textField({
