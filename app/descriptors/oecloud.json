@@ -66,9 +66,14 @@
           "type": "String"
         },
         {
-            "name": "completionHook",
-            "isAttr": true,
-            "type": "String"
+          "name": "completionHook",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "postCompletionHook",
+          "isAttr": true,
+          "type": "String"
         }
       ]
     },
