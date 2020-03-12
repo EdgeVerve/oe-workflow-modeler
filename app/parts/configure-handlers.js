@@ -112,9 +112,8 @@ function ConfigureButtons(bpmnModeler) {
     ReduxStore.dispatch(setPrimaryFolderAction(primaryFolder));
   });
 
-  communicator.onRuleFiles(function (results) {
-    let rules = results.map(entry => path.basename(entry).replace(path.extname(entry), ''));
-    ReduxStore.dispatch(receiveRulesSuccessAction(rules));
+  communicator.onRuleFiles(function (data) {
+    ReduxStore.dispatch(receiveRulesSuccessAction(data));
   });
 
   if (window.oeStudio) {
@@ -267,7 +266,7 @@ function ConfigureButtons(bpmnModeler) {
     function handleDragOver(e) {
       e.stopPropagation();
       e.preventDefault();
-
+      
       e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
 

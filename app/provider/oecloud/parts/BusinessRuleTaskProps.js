@@ -6,7 +6,40 @@ import {
 } from 'bpmn-js/lib/util/ModelUtil';
 
 
-import {ReduxStore} from '../../../state/store';
+import { ReduxStore } from '../../../state/store';
+
+import {
+  escapeHTML
+} from 'bpmn-js-properties-panel/lib/Utils';
+
+const path = require('path');
+const domQuery = require('min-dom').query;
+const domClear = require('min-dom').clear;
+const domify = require('min-dom').domify;
+
+function getDecisionOptions(mode, ruleData) {
+  if (mode) {
+    let rules = ruleData[mode].map(entry => path.basename(entry).replace(path.extname(entry), ''));
+    let DECISION_OPTIONS = [{
+      name: '',
+      value: ''
+    }];
+    if (rules.length) {
+      DECISION_OPTIONS = DECISION_OPTIONS.concat(rules.map(item => {
+        return {
+          name: item.split('-').map(p => p[0].toUpperCase() + p.substr(1)).join(' '),
+          value: item
+        }
+      }));
+    }
+    return DECISION_OPTIONS.concat({
+      name: 'Custom',
+      value: 'custom'
+    });
+  } else {
+    return [];
+  }
+}
 
 export default function (group, element) {
 
@@ -16,19 +49,9 @@ export default function (group, element) {
 
   if (is(element, 'bpmn:BusinessRuleTask')) {
 
-    let rulesEntries = ReduxStore.getState().rules || [];
-    rulesEntries = rulesEntries.map(item => {
-      return {
-        name: item.split('-').map(p => p[0].toUpperCase()+p.substr(1)).join(' '),
-        value: item
-      };
-    }).concat({
-      name: 'Custom',
-      value: 'custom'
-    });
-  
+    let mode = element.businessObject.mode;
+    let ruleData = ReduxStore.getState().rules;
 
-    // Task Implementation
     group.entries.push(EntryFactory.selectBox({
       id: 'implementation',
       label: 'Implementation',
@@ -39,30 +62,13 @@ export default function (group, element) {
       modelProperty: 'implementation'
     }));
 
-    // Task Implementation
-    group.entries.push(EntryFactory.selectBox({
-      id: 'decisionRefBinding',
-      label: 'Decision Type',
-      selectOptions: rulesEntries,
-      modelProperty: 'decisionRefBinding',
-      set: function (element, values) {
-        var res = {};
-        if (values.decisionRefBinding !== '') {
-          res.decisionRefBinding = values.decisionRefBinding;
-        } else {
-          res.decisionRefBinding = undefined;
-        }
-        if(res.decisionRefBinding !== 'custom'){
-          res.decisionRef = res.decisionRefBinding;
-        }
-        return CmdHelper.updateProperties(element, res);
-      }
-    }));
-
     group.entries.push(EntryFactory.selectBox({
       id: 'mode',
       label: 'Mode',
-      selectOptions :[{
+      selectOptions: [{
+        name: '',
+        value: ''
+      }, {
         name: 'Decision Table',
         value: 'DecisionTable'
       }, {
@@ -74,14 +80,50 @@ export default function (group, element) {
       }],
       modelProperty: 'mode'
     }));
-    
 
-    // completionHook
+    group.entries.push(EntryFactory.selectBox({
+      id: 'decisionRefBinding',
+      label: 'Select Name',
+      selectOptions: getDecisionOptions(mode, ruleData),
+      modelProperty: 'decisionRefBinding',
+
+      get: function (element, node) {
+        var bo = getBusinessObject(element);
+        var mode = bo.mode;
+        var selectBox = domQuery('select[name=decisionRefBinding]', node);
+        domClear(selectBox);
+        var DECISION_OPTIONS = getDecisionOptions(mode, ruleData)
+        DECISION_OPTIONS.forEach(function (option) {
+          var optionEntry = domify('<option value="' + escapeHTML(option.value) + '">' + escapeHTML(option.name) + '</option>');
+          selectBox.appendChild(optionEntry);
+        });
+        var value = bo.decisionRefBinding;
+        return {
+          decisionRefBinding: value
+        };
+      },
+
+      set: function (element, values) {
+        var res = {};
+        if (values.decisionRefBinding !== '') {
+          res.decisionRefBinding = values.decisionRefBinding;
+        } else {
+          res.decisionRefBinding = undefined;
+        }
+        if (res.decisionRefBinding !== 'custom') {
+          res.decisionRef = res.decisionRefBinding;
+        } else {
+          res.decisionRef = '';
+        }
+        return CmdHelper.updateProperties(element, res);
+      }
+    }));
+
     group.entries.push(EntryFactory.textField({
       id: 'decisionRef',
-      label: 'Decision Ref',
+      label: 'Custom Name',
       modelProperty: 'decisionRef',
-      disabled: function (element) {
+      hidden: function (element) {
         return getBusinessObject(element).decisionRefBinding !== 'custom';
       }
     }));

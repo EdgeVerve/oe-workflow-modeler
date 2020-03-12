@@ -1,6 +1,10 @@
 module.exports = {
   flows: ['process-one', 'process-two', 'process-three'],
-  rules: ['decision-one', 'decision-two', 'decision-three'],
+  rules: {
+    DecisionTable: ['decision-table-one', 'decision-table-two', 'decision-table-three'],
+    DecisionService: ['decision-service-one', 'decision-service-two', 'decision-service-three'],
+    DecisionTree: ['decision-tree-one', 'decision-tree-two', 'decision-tree-three']
+  },
   models: {
       Account: {
         create: '[options, data]',
