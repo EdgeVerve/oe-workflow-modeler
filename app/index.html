@@ -22,7 +22,7 @@
         </svg>
         <div class="main-label">Draw process diagrams</div>
         <div class="sub-label">Drop BPMN diagram from desktop </br> or tap here
-          <button class="js-create-diagram mdc-fab" aria-label="New">
+          <button id="create-diagram" class="js-create-diagram mdc-fab" aria-label="New">
             <span class="mdc-fab__icon material-icons">edit</span>
           </button> to get started.
         </div>
@@ -45,7 +45,12 @@
       <div id="js-properties-panel" class="closed"></div>
     </div>
   </div>
-
+  <!-- <div class="dialog" id="save-as-dialog">
+      <label><b>Save File</b></label>
+      <input type="text" id="fname" name="fname">
+      <button type="button">Save</button>
+      <button type="button">Cancel</button>
+  </div> -->
   <div class="modal-container">
     <input id="modal-toggle" type="checkbox">
     <label class="modal-backdrop" for="modal-toggle"></label>
@@ -55,38 +60,21 @@
       <div id="script-editor"></div>
       <label class="modal-content-btn" for="modal-toggle">OK</label>
     </div>
-  </div>
-  <ul class="buttons hidden">
-    <div class="menu-items hidden">
-      <select id="oe-version" class="custom-select" id="inlineFormCustomSelect">
-        <option value="v1">v1</option>
-        <option value="v2">v2</option>
-      </select>
-      <button id="js-save-diagram" class="mdc-fab mdc-fab--mini" aria-label="Save">
-        <span class="mdc-fab__icon material-icons">save</span>
-      </button>
-
-      <button id="js-download-diagram" class="mdc-fab mdc-fab--mini" aria-label="Download">
-        <span class="mdc-fab__icon material-icons">get_app</span>
-      </button>
-      <button id="js-download-svg" class="mdc-fab mdc-fab--mini" aria-label="Download">
-        <span class="mdc-fab__icon material-icons">image</span>
-      </button>
+  </div> 
+   <span id="js-file-name" contenteditable spellcheck="false"></span>
     </div>
-    <span id="js-file-name" contenteditable></span>
-    <button id="js-menu" class="mdc-fab" type="button">
-      <span class="mdc-fab__icon material-icons">menu</span>
-    </button>
-  </ul>
-  <button id="props-toggle" class="hidden" aria-label="Expand">
+  <button id="props-toggle" class="hidden move-toggle closed" aria-label="Expand" data-toggle="tooltip" title="Expand Property Panel">
     <span class="mdc-fab__icon material-icons">chevron_right</span>
   </button>
   <button id="view-parent-flow" type="button" class="hidden" title="Go to Parent">
       <span class="mdc-fab__icon material-icons">undo</span>
   </button>
-  <button id="open-local-file" type="button" class="mdc-fab">
-    <span class="mdc-fab__icon material-icons">folder</span>
-  </button>
+  <div class="searchGroup hide">
+    <input type="text" id="srch-grp" class="searchTerm" placeholder="Search File">
+    <button id="srch-btn" type="submit" class="searchButton">
+      <span class="material-icons">search</span>
+    </button>
+  </div>
   <div id="file-list" class="dropdown1-menu hidden" tabindex="0" aria-label="Select a file">
 
     <div class="search">
@@ -104,6 +92,42 @@
       <a id="upload-file" class="dropdown-item" tabindex="0">Load File</a>
       <a class="js-create-diagram dropdown-item" tabindex="0">New</a>
     </div>
+  </div>
+  <div class="bottom-bar">
+   <div class="download-button hidden">
+      <select id="oe-version" id="inlineFormCustomSelect">
+          <option value="v1">version-1</option>
+          <option value="v2">version-2</option>
+        </select>
+    <div class="save-button">
+    <button id="js-save-diagram" class="button" aria-label="Save" data-toggle="tooltip" title="Save">
+      <span class="mdc-fab__icon material-icons">save</span>
+    </button>
+    <select id="save-select" id="saveSelectButton">
+      <option class="hide"></option>
+      <option value="save">save</option>
+      <option value="save-as">Save As</option>
+    </select>
+  </div>
+    <button id="js-download-diagram" class="button" aria-label="Download" data-toggle="tooltip" title="Download">
+      <span class="mdc-fab__icon material-icons">get_app</span>
+    </button>
+    <button id="js-download-svg" class="button" aria-label="Download as Image" data-toggle="tooltip" title="Save as Image">
+      <span class="mdc-fab__icon material-icons">image</span>
+    </button>
+    </div>
+    <div class="custom-node">
+        <button id="open-local-file" type="button" class="button" data-toggle="tooltip" title="Upload-file">
+            <span class="mdc-fab__icon material-icons">folder</span>
+        </button>
+        <span class="simple-text">Select a BPMN Diagram</span>
+        <div id="custom-button-container">
+        <button id="open-custom-node" type="button" class="hide button" data-toggle="tooltip" title="Custom-node">
+          <span class="mdc-fab__icon material-icons more-button">more</span>
+        </button>
+        <span class="custom-text">Custom Node</span>
+        </div>
+      </div>
   </div>
 <oe-message-handler persist-on="error"></oe-message-handler>
   <script src="index.js"></script>

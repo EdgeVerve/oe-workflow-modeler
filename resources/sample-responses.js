@@ -18,6 +18,7 @@ module.exports = {
   extensions: [{
     "type": "bpmn:CallActivity",
     "title": "Create Account",
+    "group":"Group-1",
     "className": "bpmn-icon-call-activity",
     "data": {
       "name": "Create Account",
@@ -103,6 +104,7 @@ module.exports = {
   {
     "type": "bpmn:ServiceTask",
     "title": "Update Finacle",
+    "group":  "Group-1",
     "className": "bpmn-icon-service-task",
     "data": {
       "name": "Update Finacle"
@@ -121,6 +123,7 @@ module.exports = {
   {
     "type": "bpmn:ScriptTask",
     "title": "Execute Code",
+    "group":"Group-2",
     "className": "bpmn-icon-script-task",
     "data": {
       "name": "Set Variables",
