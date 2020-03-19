@@ -605,8 +605,15 @@ select:focus {
       
     }
     #file-name {
-      padding: 5px;
+      padding: 2px;
       margin: 5px;
+      width: 230px;
+      border: none;
+      border-bottom: 1px solid black; 
+    }
+    #file-name:focus {
+      border-color: blue; 
+      outline: none;
     }
     .dialog-container {
       margin: 60px auto;
@@ -624,39 +631,25 @@ select:focus {
         cursor: pointer;
         transition: opacity 0.2s ease-in; 
       }
-      .dialog-close {
-        position: absolute;
-        text-align: center;
-        cursor: pointer;
-        bottom: 20px;
-        right: 80px;
-        background: #446cb3;
-        color: #fff;
-        width: 60px;
-        border-radius: 2px;
-        font-size: 12px;
-        height: 32px;
-        padding-top:7.5px;
-        font-weight: normal;
-        margin-bottom: 0px;
-        &:hover { color: #fff; background: #365690; }       
-      }      
+      .dialog-close,
       .dialog-save-btn {
         position: absolute;
         text-align: center;
         cursor: pointer;
         bottom: 20px;
         right: 20px;
-        background: #446CB3;
+        background: #446cb3;
         color: #fff;
-        width: 50px;
+        width: 60px;
         border-radius: 2px;
         font-size: 12px;
         height: 32px;
-        padding-top:7.5px;
         font-weight: normal;
         margin-bottom: 0px;
-        &:hover { color: #fff; background: #365690; }
+        &:hover { color: #fff; background: #365690; }       
+      }      
+      .dialog-close {
+        right: 85px;
       }
       #dialog-toggle {
         display: none;  
@@ -676,19 +669,19 @@ select:focus {
         &.active ~ .dialog,
         &:checked ~ .dialog {
           opacity: 1;
-          background-color: #fff;
-          max-width: 800px;
-          width: 270px;
-          height: 150px;
-          padding: 10px 30px;
-          position: fixed;
-          left: ~"calc(50% - 180px)";
-          top: ~"calc(50% - 80px)";
-          border-radius: 4px;
-          z-index: 999;
-          pointer-events: auto;
-          cursor: auto;
-          display: block;     
+    background-color: #fff;
+    max-width: 800px;
+    width: 285px;
+    height: 162px;
+    padding: 18px 30px;
+    position: fixed;
+    left: calc(50% - 180px);
+    top: calc(50% - 100px);
+    border-radius: 4px;
+    z-index: 999;
+    pointer-events: auto;
+    cursor: auto;
+    display: block;
           box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6);  
           @media (max-width: 400px) { left: 0; }                   
         }  
