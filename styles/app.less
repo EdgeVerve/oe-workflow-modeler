@@ -610,6 +610,15 @@ select:focus {
       border: none;
       border-bottom: 1px solid black; 
     }
+    #zoom-in {
+      border-left: 2px solid #00000066;
+    }
+    #reset-zoom,
+    #save,
+    #js-download-svg {
+      border-right: 2px solid #00000066;
+      margin-right: 10px;
+    }
     .dropbtn:focus {
       outline: none;
     }
@@ -715,19 +724,20 @@ select:focus {
     .dropup {
       position: relative;
       display: flex;
-      margin-right: 10px;
     }
     
     .dropup-content {
       display: none;
-    position: absolute;
-    background-color: #a6acaf;
-    min-width: 83px;
-    right: 0;
-    bottom: 40px;
-    z-index: 1;
+      position: absolute;
+      background-color: #a6acaf;
+      min-width: 80px;
+      right: 10px;
+      bottom: 40px;
+      z-index: 1;
     }
-    
+    #oe-version .dropup-content {
+      right: 3px;
+    }
     .dropup-content a {
       color: black;
       padding: 12px 16px;

@@ -335,6 +335,25 @@ function ConfigureButtons(bpmnModeler) {
       bpmnModeler.get('zoomScroll').toggle(true);
     }
   })
+  $('#zoom-in').click(function(event){
+    var zoom = bpmnModeler.get('canvas').zoom();
+    bpmnModeler.get('canvas').zoom(zoom + 0.1);
+  })
+  $('#zoom-out').click(function(event){
+    var zoom = bpmnModeler.get('canvas').zoom();
+    bpmnModeler.get('canvas').zoom(zoom - 0.1);
+  })
+  $('#reset-zoom').click(function(event){
+    let canvas = bpmnModeler.get('canvas');
+    var zoomedAndScrolledViewbox = canvas.viewbox();
+    canvas.viewbox({
+      x: 0,
+      y: 0,
+      width: zoomedAndScrolledViewbox.outer.width,
+      height: zoomedAndScrolledViewbox.outer.height
+    });
+    canvas.zoom('fit-viewport');
+  })
   $(document).mouseup(function (e) { 
     if(e.target.id !== 'open-local-file' && e.target.className !== 'group' && e.target.className !== 'group-name group-name-active' &&
     e.target.className !== 'group-name' &&
@@ -473,6 +492,7 @@ function ConfigureButtons(bpmnModeler) {
   //   });
   // });
 }
+
 
 export {
   ConfigureButtons

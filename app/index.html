@@ -103,21 +103,30 @@
   </div>
   <div class="bottom-bar">
     <div class="download-button hidden">
+        <button id="zoom-in" class="button" aria-label="version-btn">
+            <span class="mdc-fab__icon material-icons">zoom_in</span>
+          </button>
+          <button id="zoom-out" class="button" aria-label="version-btn">
+              <span class="mdc-fab__icon material-icons">zoom_out</span>
+            </button>
+            <button id="reset-zoom" class="button" aria-label="version-btn">
+                <span class="mdc-fab__icon material-icons">loop</span>
+              </button>
       <div class="dropup" id="oe-version">
         <button class="dropbtn lable" style="padding-top: 0;">version</button>
         <button id="version" class="dropbtn" aria-label="version-btn">
           <span class="mdc-fab__icon material-icons">arrow_drop_up</span>
         </button>
         <div class="dropup-content">
-          <a href="#" value="v1">version-1</a>
-          <a href="#" value="v2">version-2</a>
+          <a href="#" value="v1">v1</a>
+          <a href="#" value="v2">v2</a>
         </div>
       </div>
       <div class="save-button" id="save-container">
-        <button id="js-save-diagram" class="button" aria-label="Save" data-toggle="tooltip" title="Save">
-          <span class="mdc-fab__icon material-icons">save</span>
-        </button>
         <div class="dropup">
+            <button id="js-save-diagram" class="button" aria-label="Save" data-toggle="tooltip" title="Save">
+                <span class="mdc-fab__icon material-icons">save</span>
+              </button>
           <button id="save" class="dropbtn" aria-label="save-btn">
             <span class="mdc-fab__icon material-icons">arrow_drop_up</span>
           </button>
