@@ -236,16 +236,16 @@ function ConfigureButtons(bpmnModeler) {
   });
 });
  
-  $('#js-file-name').keypress(function (evt) {
-    if (evt.key === 'Enter') {
-      evt.preventDefault();
-      evt.currentTarget.blur();
-    }
-  });
+  // $('#js-file-name').keypress(function (evt) {
+  //   if (evt.key === 'Enter') {
+  //     evt.preventDefault();
+  //     evt.currentTarget.blur();
+  //   }
+  // });
 
-  $('#js-file-name').blur(function (evt) {
-    ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
-  });
+  // $('#js-file-name').blur(function (evt) {
+  //   ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
+  // });
   function openDiagram(fileName, filePath, xml) {
     let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
@@ -335,6 +335,25 @@ function ConfigureButtons(bpmnModeler) {
       bpmnModeler.get('zoomScroll').toggle(true);
     }
   })
+  $('#zoom-in').click(function(event){
+    var zoom = bpmnModeler.get('canvas').zoom();
+    bpmnModeler.get('canvas').zoom(zoom + 0.1);
+  })
+  $('#zoom-out').click(function(event){
+    var zoom = bpmnModeler.get('canvas').zoom();
+    bpmnModeler.get('canvas').zoom(zoom - 0.1);
+  })
+  $('#reset-zoom').click(function(event){
+    let canvas = bpmnModeler.get('canvas');
+    var zoomedAndScrolledViewbox = canvas.viewbox();
+    canvas.viewbox({
+      x: 0,
+      y: 0,
+      width: zoomedAndScrolledViewbox.outer.width,
+      height: zoomedAndScrolledViewbox.outer.height
+    });
+    canvas.zoom('fit-viewport');
+  })
   $(document).mouseup(function (e) { 
     if(e.target.id !== 'open-local-file' && e.target.className !== 'group' && e.target.className !== 'group-name group-name-active' &&
     e.target.className !== 'group-name' &&
@@ -412,13 +431,15 @@ function ConfigureButtons(bpmnModeler) {
       downloadFile(getFilename('svg').name, data);
     });
   });
-  $("#oe-version").change(function () {
-    var selectedVersion = $(this)[0].value;
+  $("#oe-version a").click(function () {
+    var selectedVersion = $(this)[0].attributes.value.value;
+    $('.lable')[0].innerText = selectedVersion;
     ReduxStore.dispatch(changeVersionAction(selectedVersion));
   });
-  $("#save-select").change(function () {
-    var selectedVersion = $(this)[0].value;
-    if(selectedVersion === 'save'){
+  
+    $('#save-container a').click('click', function(){
+    var selectedValue = $(this)[0].attributes.value.value;
+    if(selectedValue === 'save'){
       bpmnModeler.saveXML({
         format: true
       }, function (err, data) {
@@ -428,8 +449,24 @@ function ConfigureButtons(bpmnModeler) {
         communicator.saveDiagramContent(getFilename().fullName, data);
       });
     }
-    if(selectedVersion === 'save-as'){
-        
+    if(selectedValue === 'save-as'){
+      $('#dialog-toggle')[0].checked = true;
+      $('#file-name')[0].value = $('#js-file-name')[0].innerText;
+      $('#save-btn').click(function(){
+        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
+        bpmnModeler.saveXML({
+          format: true
+        }, function (err, data) {
+          if (ReduxStore.getState().version === 'v1') {
+            data = convertToOld(data);
+          }
+          communicator.saveDiagramContent($('#file-name')[0].value , data);
+        });
+        $('#dialog-toggle')[0].checked = false;
+      })
+      $('#close-btn').click(function(){
+        $('#dialog-toggle')[0].checked = false;
+      })
     }
   });
 
@@ -455,6 +492,7 @@ function ConfigureButtons(bpmnModeler) {
   //   });
   // });
 }
+
 
 export {
   ConfigureButtons
