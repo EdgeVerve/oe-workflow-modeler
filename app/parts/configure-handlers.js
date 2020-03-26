@@ -453,7 +453,6 @@ function ConfigureButtons(bpmnModeler) {
       $('#dialog-toggle')[0].checked = true;
       $('#file-name')[0].value = $('#js-file-name')[0].innerText;
       $('#save-btn').click(function(){
-        //ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
         bpmnModeler.saveXML({
           format: true
         }, function (err, data) {
@@ -463,6 +462,7 @@ function ConfigureButtons(bpmnModeler) {
           communicator.saveDiagramContent($('#file-name')[0].value , data);
         });
         $('#dialog-toggle')[0].checked = false;
+        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
       })
       $('#close-btn').click(function(){
         $('#dialog-toggle')[0].checked = false;
