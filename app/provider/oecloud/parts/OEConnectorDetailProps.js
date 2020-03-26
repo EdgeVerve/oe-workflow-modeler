@@ -101,7 +101,7 @@ function OEConnectorDetailProps(group, element, bpmnFactory) {
       var bo = getBusinessObject(element);
       var value = bo && bo.get('modelValue');
       var connector = bo && getConnector(bo);
-      if (connector && connector.get('model')) {
+      if (connector) {
         if (!value) {
           value = connector.get('model');
         }
@@ -112,7 +112,7 @@ function OEConnectorDetailProps(group, element, bpmnFactory) {
         if (value !== CUSTOM_MODEL_NAME) {
           connector.set('model', value);
         }
-      }
+      } 
       return {
         modelValue: value
       };

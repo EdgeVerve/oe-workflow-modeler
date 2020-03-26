@@ -106,9 +106,17 @@ export default function (group, element) {
     // completionHook
     group.entries.push(entryFactory.textField({
       id: 'completionHook',
-      description: 'before comlpletion hook',
+      description: 'before completion hook',
       label: 'Completion Hook',
       modelProperty: 'completionHook'
+    }));
+
+    // postCompletionHook
+    group.entries.push(entryFactory.textField({
+      id: 'postCompletionHook',
+      description: 'after completion hook',
+      label: 'Post Completion Hook',
+      modelProperty: 'postCompletionHook'
     }));
 
   }

@@ -66,9 +66,14 @@
           "type": "String"
         },
         {
-            "name": "completionHook",
-            "isAttr": true,
-            "type": "String"
+          "name": "completionHook",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "postCompletionHook",
+          "isAttr": true,
+          "type": "String"
         }
       ]
     },
@@ -183,6 +188,17 @@
         },
         {
           "name": "FTValue",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "DmnCapable",
+      "extends": ["bpmn:BusinessRuleTask"],
+      "properties": [
+        {
+          "name": "mode",
+          "isAttr": true,
           "type": "String"
         }
       ]

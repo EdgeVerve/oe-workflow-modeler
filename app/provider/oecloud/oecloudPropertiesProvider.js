@@ -80,6 +80,65 @@ function createOEConnectorGroup(element, bpmnFactory, elementRegistry) {
   return OEConnectorDetailsGroup;
 }
 
+function handleInputOutputTab(element, tabsArr){
+  let inputOutputTab = tabsArr.find(item => item.id === 'input-output');
+  let inputOutputParameterGroup = inputOutputTab.groups.find(item => item.id === 'input-output-parameter');
+  if(inputOutputParameterGroup.entries.length){
+    /* Adding monaco editor to input/output type 'script' */
+    let scriptTypeEntry = inputOutputParameterGroup.entries.find(item => item.id === 'parameterType-script');
+    scriptTypeEntry.script.showEditor = function (evt){
+      let scriptNode = document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType-script]');
+      let value = scriptTypeEntry.get(element, scriptNode);
+
+      function updateValue(scriptValue) {
+        let scriptNode = document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType-script]');
+        let scriptFormatNode = scriptNode.querySelector('input[name=scriptFormat]');
+        scriptFormatNode.value = 'javascript';
+        scriptFormatNode.dispatchEvent(new Event('change', {
+          bubbles: true
+        }));
+
+        let scriptTypeNode = scriptNode.querySelector('select[name=scriptType]');
+        scriptTypeNode.value = 'script';
+        scriptTypeNode.dispatchEvent(new Event('change', {
+          bubbles: true
+        }));
+
+        let scriptValueNode = scriptNode.querySelector('textarea[name=scriptValue]');
+        scriptValueNode.value = scriptValue;
+        scriptValueNode.dispatchEvent(new Event('change', {
+          bubbles: true
+        }));
+      }
+
+      window.dispatchEvent(new CustomEvent('open-script-editor', {
+        detail: {
+          script: value.scriptValue,
+          cb: updateValue
+        }
+      }));
+    }
+
+    if(document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType]')){
+      let inputOutputTypedropDown = document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType]');
+      // changing the label name of script to 'Expression' in dropdown
+      inputOutputTypedropDown.querySelector('#camunda-parameterType-select').options[1].label = "Expression";
+    }
+
+    if(document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType-script]')){
+      let scriptAttributes = document.querySelector('[data-tab=input-output] [data-group=input-output-parameter] [data-entry=parameterType-script]');
+      // hiding scriptFormat field and the default value will be 'javascript'
+      scriptAttributes.querySelector('.bpp-textfield').style.display = 'none';
+      // hiding scriptType dropdown and the selected value is 'Inline Script'
+      scriptAttributes.querySelectorAll('.bpp-row')[1].style.display = 'none';
+      // changing the label of script field to 'Expression'
+      scriptAttributes.querySelectorAll('[for="cam-script-val"]')[0].textContent="Expression";
+    }
+    scriptTypeEntry.html = scriptTypeEntry.html.replace('<textarea id="cam-script-val" type="text" name="scriptValue"></textarea>', '<textarea id="cam-script-val" data-action="script.showEditor" type="text" name="scriptValue"></textarea>');
+  }
+  return tabsArr;
+};
+
 function hideUnusedTabsAndGroups(tabsArr) {
   /* Do not show listeners tab */
   tabsArr = tabsArr.filter(item => item.id !== 'listeners');
@@ -279,6 +338,7 @@ export default function oecloudPropertiesProvider(
   propertiesProvider.getTabs = function (element) {
     var tabs = camundaGetTabs(element);
 
+    tabs = handleInputOutputTab(element,tabs);
     tabs = hideUnusedTabsAndGroups(tabs);
     tabs = handleProcessElement(element, tabs);
     tabs = handleStartEvent(element, tabs);
