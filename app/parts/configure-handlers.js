@@ -462,7 +462,7 @@ function ConfigureButtons(bpmnModeler) {
           communicator.saveDiagramContent($('#file-name')[0].value , data);
         });
         $('#dialog-toggle')[0].checked = false;
-        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
+        //ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
       })
       $('#close-btn').click(function(){
         $('#dialog-toggle')[0].checked = false;
