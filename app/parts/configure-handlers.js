@@ -453,7 +453,7 @@ function ConfigureButtons(bpmnModeler) {
       $('#dialog-toggle')[0].checked = true;
       $('#file-name')[0].value = $('#js-file-name')[0].innerText;
       $('#save-btn').click(function(){
-        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
+        //ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
         bpmnModeler.saveXML({
           format: true
         }, function (err, data) {
