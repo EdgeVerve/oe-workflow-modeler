@@ -452,16 +452,15 @@ function ConfigureButtons(bpmnModeler) {
     if(selectedValue === 'save-as'){
       $('#dialog-toggle')[0].checked = true;
       $('#file-name')[0].value = $('#js-file-name')[0].innerText;
-      ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
       $('#save-btn').click(function(){
-        var name = $('#file-name')[0].value;
+        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
         bpmnModeler.saveXML({
           format: true
         }, function (err, data) {
           if (ReduxStore.getState().version === 'v1') {
             data = convertToOld(data);
           }
-          communicator.saveDiagramContent(name, data);
+          communicator.saveDiagramContent(getFilename().fullName, data);
         });
         $('#dialog-toggle')[0].checked = false;
       })
