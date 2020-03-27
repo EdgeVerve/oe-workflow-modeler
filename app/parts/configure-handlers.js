@@ -436,40 +436,34 @@ function ConfigureButtons(bpmnModeler) {
     $('.lable')[0].innerText = selectedVersion;
     ReduxStore.dispatch(changeVersionAction(selectedVersion));
   });
-  
+  function saveFile(){
+    bpmnModeler.saveXML({
+      format: true
+    }, function (err, data) {
+      if (ReduxStore.getState().version === 'v1') {
+        data = convertToOld(data);
+      }
+      communicator.saveDiagramContent(getFilename().fullName, data);
+    });
+  }
+  $('#save-btn').click(function(){
+    ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
+    saveFile();
+    $('#dialog-toggle')[0].checked = false;
+  })
     $('#save-container a').click('click', function(){
     var selectedValue = $(this)[0].attributes.value.value;
     if(selectedValue === 'save'){
-      bpmnModeler.saveXML({
-        format: true
-      }, function (err, data) {
-        if (ReduxStore.getState().version === 'v1') {
-          data = convertToOld(data);
-        }
-        communicator.saveDiagramContent(getFilename().fullName, data);
-      });
+      saveFile();
     }
     if(selectedValue === 'save-as'){
       $('#dialog-toggle')[0].checked = true;
       $('#file-name')[0].value = $('#js-file-name')[0].innerText;
-      $('#save-btn').click(function(){
-        ReduxStore.dispatch(changeFileNameAction($('#file-name')[0].value));
-        bpmnModeler.saveXML({
-          format: true
-        }, function (err, data) {
-          if (ReduxStore.getState().version === 'v1') {
-            data = convertToOld(data);
-          }
-          communicator.saveDiagramContent($('#file-name')[0].value , data);
-        });
-        $('#dialog-toggle')[0].checked = false;
-      })
-      $('#close-btn').click(function(){
-        $('#dialog-toggle')[0].checked = false;
-      })
     }
   });
-
+  $('#close-btn').click(function(){
+    $('#dialog-toggle')[0].checked = false;
+  })
   $('#js-download-diagram').click(function () {
     bpmnModeler.saveXML({
       format: true
