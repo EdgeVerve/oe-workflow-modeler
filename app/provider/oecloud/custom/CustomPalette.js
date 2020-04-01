@@ -93,7 +93,6 @@ export default class CustomPalette {
      */
     extensionEntries[`updateVariables`] = {
       group: 'custom',
-      className: 'bpmn-icon-script-task',
       title: translate('Variables'),
       action: {
         dragstart: createNodeForSetPV,
@@ -110,16 +109,15 @@ export default class CustomPalette {
 
       ExtensionElements.forEach((element, idx) => {
         extensionEntries[`custom-${idx}`] = {
-          group: 'custom',
-          className: element.className || 'bpmn-icon-task',
+          group: element.group,
           title: translate(element.title || element.data && element.data.name ? element.data.name : ''),
           action: {
             dragstart: createCustomNode.bind(element),
             click: createCustomNode.bind(element)
           }
-        }
+        }      
       });
-
+      
     }
 
     return extensionEntries;
