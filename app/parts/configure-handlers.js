@@ -484,6 +484,17 @@ function ConfigureButtons(bpmnModeler) {
   //     communicator.saveDiagramContent(getFilename().fullName, data);
   //   });
   // });
+  
+  // code for opening modeler with fileName
+  let fileName = window.location.pathname.split('/')[2]; 
+  if (fileName) {
+    communicator._xhrget(`files/${fileName}`, 'xml', function(err, xmldata) {
+      if (!err && xmldata) {
+        openDiagram(fileName, null, xmldata);
+      }
+    })
+  }
+
 }
 
 
