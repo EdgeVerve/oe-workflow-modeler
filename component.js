@@ -233,5 +233,9 @@ module.exports = function wfmodeler(app, options) {
     options.mountPath,
     configureRoutes(app, options)
   );
+  app.use(
+    options.mountPath + '/:name',
+    configureRoutes(app, options)
+  )
   app.set('oe-workflow-modeler', options);
 };
