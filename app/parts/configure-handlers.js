@@ -486,7 +486,8 @@ function ConfigureButtons(bpmnModeler) {
   // });
   
   // code for opening modeler with fileName
-  let fileName = window.location.pathname.split('/')[2]; 
+  let parts = window.location.pathname.split('/'); 
+  let fileName = parts[parts.length-2];
   if (fileName) {
     communicator._xhrget(`files/${fileName}`, 'xml', function(err, xmldata) {
       if (!err && xmldata) {
