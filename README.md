@@ -1,25 +1,43 @@
-# \<oe-workflow-modeler\>
+# oeCloud Workflow Modeler
 
-A template element , used to create oe-ui Polymer 3 elements
+## About
 
-## Install the Polymer-CLI
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and npm (packaged with [Node.js](https://nodejs.org)) installed. Run `npm install` to install your element's dependencies, then run `polymer serve` to serve your element locally.
+## Running the workflow modeler
 
-## Viewing Your Element
-
-The below command generates a JSON file that polymer reads to create documentation. This JSON is created based on the JSDoc comments present in the file provided.
+Install all required dependencies:
 
 ```
-$polymer analyze oe-workflow-modeler.js > analysis.json
+npm install
+npm install -g webpack
 ```
 
-Once analysis.json is created run the below command to serve the file. Optional parameter `--open` to launch browser.
+Build and run the project
+
 ```
-$ polymer serve [--open]
+npm run dev
 ```
 
-## Running Tests
-Once the files are served using `polymer serve` navigating to `\test` runs the test files
+## Enabling workflow modeler
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+```
+npm install oe-workflow-modeler
+```
+
+Add following to the _server/component-config.json_
+
+```
+{
+  "oe-workflow-modeler/component": {
+    "mountPath": "/wfmodeler",
+    "extensionsPath": "../../extensions.json"
+  }
+}
+```
+
+
+
+
+## License
+
+MIT

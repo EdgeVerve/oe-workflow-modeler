@@ -1,43 +1,67 @@
 {
   "name": "oe-workflow-modeler",
-  "description": "A template element , used to create oe-ui Polymer 3 elements",
-  "version": "2.1.0",
-  "main": "oe-workflow-modeler.js",
-  "dependencies": {
-    "@polymer/iron-collapse": "^3.0.1",
-    "@polymer/iron-flex-layout": "^3.0.1",
-    "@polymer/iron-icon": "^3.0.1",
-    "@polymer/iron-icons": "^3.0.1",
-    "@polymer/iron-pages": "^3.0.1",
-    "@polymer/paper-dialog": "^3.0.1",
-    "@polymer/paper-dropdown-menu": "^3.0.1",
-    "@polymer/paper-menu-button": "^3.0.1",
-    "@polymer/paper-tabs": "^3.0.1",
-    "@polymer/polymer": "^3.1.0",
-    "@polymer/iron-selector": "^3.0.1",
-    "@polymer/paper-checkbox": "^3.1.0",
-    "oe-checkbox": "^2.0.0",
-    "oe-combo": "^2.0.0",
-    "oe-input": "^2.0.0",
-    "oe-mixins": "^2.0.0",
-    "oe-ui-forms": "^2.0.0",
-    "oe-utils": "^2.0.0"
+  "version": "2.2.0",
+  "description": "oeCloud Workflow Modeler",
+  "main": "app/index.js",
+  "scripts": {
+    "watch": "webpack --watch --progress",
+    "build": "webpack",
+    "dev": "webpack-dev-server --open",
+    "prepare": "npm run build"
   },
-  "devDependencies": {
-    "@polymer/iron-demo-helpers": "^3.0.2",
-    "@webcomponents/webcomponentsjs": "^2.2.7",
-    "@polymer/iron-component-page": "^4.0.1",
-    "@polymer/iron-test-helpers": "^3.0.1",
-    "@polymer/test-fixture": "^4.0.2",
-    "axe-core": "3.1.2",
-    "chai": "4.2.0",
-    "mocha": "5.2.0",
-    "sinon": "7.2.3",
-    "wct-mocha": "1.0.0"
-  },
-  "license": "MIT",
+  "files": [
+    "dist/**",
+    "component.js"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/EdgeVerve/oe-workflow-modeler.git"
+    "url": "https://github.com/kvsrohit/oe-workflow-modeler"
+  },
+  "keywords": [
+    "oe-cloud",
+    "workflow",
+    "bpmnjs"
+  ],
+  "author": {
+    "name": "Rohit Khode",
+    "url": "https://github.com/kvsrohit"
+  },
+  "contributors": [
+    {
+      "name": "bpmn.io contributors",
+      "url": "https://github.com/bpmn-io"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "4.4.1",
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.4.2",
+    "less": "3.11.1",
+    "less-loader": "5.0.0",
+    "load-grunt-tasks": "3.5.2",
+    "mini-css-extract-plugin": "0.8.2",
+    "monaco-editor-webpack-plugin": "1.7.0",
+    "raw-loader": "3.1.0",
+    "style-loader": "1.1.3",
+    "webpack": "4.41.6",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.10.3"
+  },
+  "dependencies": {
+    "oe-message-handler": "^2.0.0",
+    "@material/fab": "^3.1.0",
+    "bpmn-js": "5.1.2",
+    "bpmn-js-properties-panel": "0.32.2",
+    "camunda-bpmn-moddle": "4.4.0",
+    "diagram-js": "5.1.1",
+    "jquery": "3.4.1",
+    "min-dash": "3.5.2",
+    "min-dom": "3.1.1",
+    "monaco-editor": "0.17.1",
+    "redux": "4.0.5",
+    "redux-logger": "3.0.6",
+    "redux-subscriber": "1.1.0",
+    "redux-thunk": "2.3.0"
   }
 }
