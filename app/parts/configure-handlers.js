@@ -235,16 +235,16 @@ function ConfigureButtons(bpmnModeler) {
   });
 });
  
-  // $('#js-file-name').keypress(function (evt) {
-  //   if (evt.key === 'Enter') {
-  //     evt.preventDefault();
-  //     evt.currentTarget.blur();
-  //   }
-  // });
+  $('#js-file-name').keypress(function (evt) {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+      evt.currentTarget.blur();
+    }
+  });
 
-  // $('#js-file-name').blur(function (evt) {
-  //   ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
-  // });
+  $('#js-file-name').blur(function (evt) {
+    ReduxStore.dispatch(changeFileNameAction(evt.currentTarget.innerText));
+  });
   function openDiagram(fileName, filePath, xml) {
     let version;
     filePath = filePath ? filePath.replace(fileName, '') : '';
