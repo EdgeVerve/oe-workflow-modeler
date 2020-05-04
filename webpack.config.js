@@ -73,6 +73,10 @@ module.exports = {
         to: 'vendor/bootstrap/css'
       },
       {
+        from: './node_modules/material-design-icons/iconfont',
+        to: 'vendor/material-design-icons/iconfont'
+      },
+      {
         from: 'app',
         ignore: ['**/*.js', 'app.css'],
         to: ''
