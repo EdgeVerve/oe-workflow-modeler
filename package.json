@@ -55,7 +55,7 @@
     "bpmn-js-properties-panel": "0.32.2",
     "camunda-bpmn-moddle": "4.4.0",
     "diagram-js": "5.1.1",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "min-dash": "3.5.2",
     "min-dom": "3.1.1",
     "monaco-editor": "0.17.1",
