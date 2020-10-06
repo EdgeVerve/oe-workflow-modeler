@@ -14,7 +14,7 @@ function ConfigureScriptEditor(){
         return './html.worker.js';
       }
       if (label === 'typescript' || label === 'javascript') {
-        return './typescript.worker.js';
+        return './ts.worker.js';
       }
       return './editor.worker.js';
     }

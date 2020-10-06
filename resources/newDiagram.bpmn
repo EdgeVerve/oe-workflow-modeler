@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:oecloud="http://oecloud" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
   <bpmn2:process id="Process_1" isExecutable="false">
-    <bpmn2:startEvent id="StartEvent_1">
+    <bpmn2:startEvent id="StartEvent_1" name="Start">
       <bpmn2:outgoing>SequenceFlow_1oq73b5</bpmn2:outgoing>
     </bpmn2:startEvent>
     <bpmn2:sequenceFlow id="SequenceFlow_1oq73b5" sourceRef="StartEvent_1" targetRef="Task_1fvj60j" />
-    <bpmn2:endEvent id="EndEvent_07dglq5">
+    <bpmn2:endEvent id="EndEvent_07dglq5" name="End">
       <bpmn2:incoming>SequenceFlow_1oi7hr1</bpmn2:incoming>
     </bpmn2:endEvent>
     <bpmn2:sequenceFlow id="SequenceFlow_1oi7hr1" sourceRef="Task_1fvj60j" targetRef="EndEvent_07dglq5" />
-    <bpmn2:serviceTask id="Task_1fvj60j">
-      <bpmn2:extensionElements>
-        <oecloud:oeConnector>
-          <oecloud:model>Account</oecloud:model>
-          <oecloud:method>update</oecloud:method>
-        </oecloud:oeConnector>
-      </bpmn2:extensionElements>
+    <bpmn2:userTask id="Task_1fvj60j" name="Approval" oecloud:excludedUsers="sample">
       <bpmn2:incoming>SequenceFlow_1oq73b5</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_1oi7hr1</bpmn2:outgoing>
-    </bpmn2:serviceTask>
+    </bpmn2:userTask>
   </bpmn2:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="412" y="240" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="418" y="283" width="25" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1oq73b5_di" bpmnElement="SequenceFlow_1oq73b5">
         <di:waypoint x="448" y="258" />
@@ -31,12 +28,15 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_07dglq5_di" bpmnElement="EndEvent_07dglq5">
         <dc:Bounds x="652" y="240" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="660" y="283" width="20" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1oi7hr1_di" bpmnElement="SequenceFlow_1oi7hr1">
         <di:waypoint x="600" y="258" />
         <di:waypoint x="652" y="258" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0uplw2p_di" bpmnElement="Task_1fvj60j">
+      <bpmndi:BPMNShape id="UserTask_0ebojb9_di" bpmnElement="Task_1fvj60j">
         <dc:Bounds x="500" y="218" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>

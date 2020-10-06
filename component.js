@@ -16,8 +16,8 @@ function configureRoutes(app, options) {
     };
   }
 
-  if (options.extensionsPath) {
-    router.get('/extensions', function getExtensions(req, res, next) {
+  router.get('/extensions', function getExtensions(req, res, next) {
+    if (options.extensionsPath) {
       let extensionsFile = path.join(__dirname, options.extensionsPath);
       try {
         let extensions = require(extensionsFile);
@@ -25,8 +25,10 @@ function configureRoutes(app, options) {
       } catch (err) {
         next(err);
       }
-    });
-  }
+    } else {
+      res.send([]);
+    }
+  });
 
   router.get('/flows', function getFlows(req, res, next) {
     var filter = {
@@ -46,15 +48,62 @@ function configureRoutes(app, options) {
   });
 
   router.get('/rules', function getRules(req, res, next) {
-    app.models.DecisionTable.find({
+    let filter = {
       fields: ['name']
-    }, getCallContext(req),
-    function fetchDecisionTable(err, decisionTable) {
-      if (err) {
-        return next(err);
-      }
-      res.send(decisionTable.map(item => item.name));
+    };
+    let options = getCallContext(req);
+
+    let fetchDecisionTable = new Promise((resolve, reject) => {
+      app.models.DecisionTable.find(filter, options, function fetchCallback(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.map(item => item.name));
+        }
+      })
     });
+
+    let fetchDecisionService = new Promise((resolve, reject) => {
+      app.models.DecisionService.find(filter, options, function fetchCallback(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.map(item => item.name));
+        }
+      })
+    });
+
+    let fetchDecisionTree = new Promise((resolve, reject) => {
+      app.models.DecisionTree.find(filter, options, function fetchCallback(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.map(item => item.name));
+        }
+      })
+    });
+
+    async function fetchResult() {
+      try {
+        let dTable = await fetchDecisionTable;
+        let dService = await fetchDecisionService;
+        let dTree = await fetchDecisionTree;
+        return [dTable, dService, dTree];
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    fetchResult().then(result => {
+      let ruleObj = {
+        DecisionTable: result[0],
+        DecisionService: result[1],
+        DecisionTree: result[2]
+      }
+      res.send(ruleObj)
+    }).catch(err=>{
+      return next(err);
+    })
   });
 
 
@@ -95,16 +144,16 @@ function configureRoutes(app, options) {
       },
       fields: ['xmldata', 'versionmessage']
     }, getCallContext(req),
-    function fetchBpmn(err, bpmndata) {
-      if (err) {
-        next(err);
-      } else if (bpmndata.length) {
-        bpmndata.sort((a, b) => (a.versionmessage < b.versionmessage) ? 1 : -1);
-        res.send(bpmndata[0].xmldata);
-      } else {
-        res.status(404).send('Not found');
-      }
-    });
+      function fetchBpmn(err, bpmndata) {
+        if (err) {
+          next(err);
+        } else if (bpmndata.length) {
+          bpmndata.sort((a, b) => (a.versionmessage < b.versionmessage) ? 1 : -1);
+          res.send(bpmndata[0].xmldata);
+        } else {
+          res.status(404).send('Not found');
+        }
+      });
   });
   router.post('/files/:filename', function postWfModel(req, res, next) {
     var fileName = req.params.filename;
@@ -115,61 +164,61 @@ function configureRoutes(app, options) {
       },
       fields: ['bpmnname', 'versionmessage']
     }, getCallContext(req),
-    function findBpmn(err, bpmndata) {
-      var bpmnData = {};
-      if (err) {
-        next(err);
-      } else if (bpmndata.length) {
-        var version = [];
-        bpmndata.forEach(bpmndata => {
-          version.push(parseFloat(bpmndata.versionmessage) * 10);
-        });
-        version.sort((a, b) => (b - a));
-        bpmnData.bpmnname = fileName;
-        var newVersion = (version[0] + 1) / 10;
-        bpmnData.versionmessage = newVersion;
-        bpmnData.xmldata = xmlData;
-        app.models.bpmndata.upsert(bpmnData, getCallContext(req),
-          function updateBpmn(err, bpmn) {
-            if (err) {
-              return next(err);
-            } else if (bpmn) {
-              app.models.WorkflowDefinition.create({
-                name: bpmnData.bpmnname,
-                xmldata: bpmnData.xmldata
-              }, getCallContext(req),
-              function createWf(err, wfModel) {
-                if (err) {
-                  return next(err);
-                }
-                wfModel.versionmessage = bpmnData.versionmessage;
-                res.json(wfModel);
-              });
-            }
+      function findBpmn(err, bpmndata) {
+        var bpmnData = {};
+        if (err) {
+          next(err);
+        } else if (bpmndata.length) {
+          var version = [];
+          bpmndata.forEach(bpmndata => {
+            version.push(parseFloat(bpmndata.versionmessage) * 10);
           });
-      } else {
-        bpmnData.versionmessage = '1.0';
-        bpmnData.xmldata = xmlData;
-        bpmnData.bpmnname = fileName;
-        app.models.bpmndata.create(bpmnData, getCallContext(req),
-          function insertBpmn(err, bpmn) {
-            if (err) {
-              next(err);
-            } else if (bpmn) {
-              app.models.WorkflowDefinition.create({
-                name: bpmnData.bpmnname,
-                xmldata: bpmnData.xmldata
-              }, getCallContext(req),
-              function createWf(err, wfModel) {
-                if (err) {
-                  next(err);
-                }
-                res.send(wfModel);
-              });
-            }
-          });
-      }
-    });
+          version.sort((a, b) => (b - a));
+          bpmnData.bpmnname = fileName;
+          var newVersion = (version[0] + 1) / 10;
+          bpmnData.versionmessage = newVersion;
+          bpmnData.xmldata = xmlData;
+          app.models.bpmndata.upsert(bpmnData, getCallContext(req),
+            function updateBpmn(err, bpmn) {
+              if (err) {
+                return next(err);
+              } else if (bpmn) {
+                app.models.WorkflowDefinition.create({
+                  name: bpmnData.bpmnname,
+                  xmldata: bpmnData.xmldata
+                }, getCallContext(req),
+                  function createWf(err, wfModel) {
+                    if (err) {
+                      return next(err);
+                    }
+                    wfModel.versionmessage = bpmnData.versionmessage;
+                    res.json(wfModel);
+                  });
+              }
+            });
+        } else {
+          bpmnData.versionmessage = '1.0';
+          bpmnData.xmldata = xmlData;
+          bpmnData.bpmnname = fileName;
+          app.models.bpmndata.create(bpmnData, getCallContext(req),
+            function insertBpmn(err, bpmn) {
+              if (err) {
+                next(err);
+              } else if (bpmn) {
+                app.models.WorkflowDefinition.create({
+                  name: bpmnData.bpmnname,
+                  xmldata: bpmnData.xmldata
+                }, getCallContext(req),
+                  function createWf(err, wfModel) {
+                    if (err) {
+                      next(err);
+                    }
+                    res.send(wfModel);
+                  });
+              }
+            });
+        }
+      });
   });
   router.use(loopback.static(MODELER_UI_ROOT));
   return router;
@@ -184,5 +233,9 @@ module.exports = function wfmodeler(app, options) {
     options.mountPath,
     configureRoutes(app, options)
   );
+  app.use(
+    options.mountPath + '/:name',
+    configureRoutes(app, options)
+  )
   app.set('oe-workflow-modeler', options);
 };

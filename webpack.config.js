@@ -41,7 +41,16 @@ module.exports = {
         test: /\.css$/,
         include: MONACO_DIR,
         use: ['style-loader', 'css-loader'],
-      }, {
+      },{
+        test: /\.ttf$/,
+        include: MONACO_DIR,
+
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+    }, {
         test: /\.less$/,
         use: [MiniCssExtractPlugin.loader, /*'style-loader',*/ 'css-loader', 'less-loader'],
       }
@@ -62,6 +71,10 @@ module.exports = {
       {
         from: './node_modules/bootstrap/dist/css/bootstrap.min.css',
         to: 'vendor/bootstrap/css'
+      },
+      {
+        from: './node_modules/material-design-icons/iconfont',
+        to: 'vendor/material-design-icons/iconfont'
       },
       {
         from: 'app',
