@@ -107,11 +107,11 @@ module.exports = {
   },
   {
     "type": "bpmn:ServiceTask",
-    "title": "Update Finacle",
+    "title": "Update Server",
     "group":  "Group-1",
     "className": "bpmn-icon-service-task",
     "data": {
-      "name": "Update Finacle"
+      "name": "Update Server"
     },
     "extensions": [{
       "type": "oecloud:RestConnector",
